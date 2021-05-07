@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>box</title>
+	<style type="text/css">
+
+		* {
+
+			font-size: 13px;
+			letter-spacing: 1px;
+		}
+
+		input,button,select,textarea { outline: none; }
+
+		.flex {
+
+			display: flex !important;
+		}
+		.xy-center {
+
+			align-items: center !important;
+			justify-content: center !important;
+		}
+		.x-flex-end {
+
+			justify-content: flex-end !important;
+		}
+		.y-flex-end {
+
+			align-items: flex-end !important;
+		}
+		.x-sb {
+
+    		justify-content: space-between !important;
+		}
+		.ibk {
+
+			display: inline-block !important;
+		}
+		.switch .btn {
+			margin: 0;
+		}
+		.box {
+			width: 390px;
+			border: 1px solid #efeeee;
+			border-radius: 4px;
+
+			margin: 2rem auto;
+		}
+		#box:hover {
+
+			box-shadow: 0px 1px 1px 6px #ebfbff;
+		}
+		.form-group {
+
+			margin: 1rem;
+			display: flex;
+    		align-items: center;
+		}
+		.finput {
+
+			width: 240px;
+			height: 20px;
+			border: 1px solid #ccc;
+			border-radius: 2px;
+		}
+		.finput:focus {
+
+			border-color: #66afe9;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+		}
+		.cloud-box {
+			position: relative;
+		}
+		.cloud-box-tips {
+
+			align-self: flex-start;
+			border: 1px solid #ccc;
+			border-top: none;
+			position: absolute;
+			right: 10px;
+			padding: 0 3px;
+			font-size: 12px;
+			cursor: pointer;
+		}
+		.btn {
+
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 2px;
+			padding: 2px 1rem;
+			cursor: pointer;
+			user-select: none;
+		}
+		.btn:hover {
+
+			border-color: #12adc5;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+		}
+		.btn-act {
+
+			background: #00adff;
+			border-color: #00adff;
+			color: #fff;
+		}
+		.msg_area, .bgc-group {
+
+			width: 246px;
+		}
+		.bgc {
+
+			width: 11px;
+			height: 17px;
+			border: 1px solid;
+			border-radius: 2px;
+			cursor: pointer;
+		}
+		.bgc:hover {
+
+			border: 1px dashed;
+		}
+
+		.tips {
+
+			margin-right: 1rem;
+		}
+	</style>
+</head>
+<body>
+
+	<div style="width: 500px;margin: 2rem auto;">
+		<h1>1、fehelper 的开发文档中的 chrome 存储说明、可以查看源码的一些东西</h1>
+		<h1>2、书签的导出与导入</h1>
+		<h1>3、工具的设置页面</h1>
+		<h1>4、书签的同步开关</h1>
+		<h1>5、多语言设置</h1>
+		<h1>6、chrome.storage.local，搭配unlimitedStorage权限</h1>
+	</div>
+
+	<div class="box flex xy-center">
+		<div>
+			<div class="form-group">
+				<label>收集链接</label>
+			</div>
+			<div class="form-group cloud-box">
+				<label>云奁：</label>
+				<input type="text" class="finput" name="lian">
+				<label class="cloud-box-tips">那城的风</label>
+			</div>
+			<div class="form-group">
+				<label>标题：</label>
+				<input type="text" class="finput" name="title">
+			</div>
+			<div class="form-group">
+				<label>链接：</label>
+				<input type="text" class="finput" name="link">
+			</div>
+			<div class="form-group x-flex-end">
+				<div class="flex x-flex-end msg_area">
+					<label class="btn tips">窗口 3 秒后关闭</label>
+					<label class="btn">新建</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="box flex xy-center">
+		<div>
+			<div class="form-group">
+				<label>创建云奁</label>
+			</div>
+			<div class="form-group cloud-box">
+				<label>云奁：</label>
+				<input type="text" class="finput" name="lian">
+				<label class="cloud-box-tips">那城的风</label>
+			</div>
+			<div class="form-group">
+				<label>衔锁：</label>
+				<div class="switch ibk">
+					<label class="btn">关闭</label>
+					<label class="btn btn-act">开启</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>云钥：</label>
+				<input type="text" class="finput" name="passkey">
+			</div>
+			<div class="form-group">
+				<label>背景：</label>
+				<div class="bgc-group flex x-sb">
+					<div class="bgc" style="background: #00adff;"></div>
+					<div class="bgc" style="background: #7463ff;"></div>
+					<div class="bgc" style="background: #ab3bff;"></div>
+					<div class="bgc" style="background: #fb00ff;"></div>
+					<div class="bgc" style="background: #ff369c;"></div>
+					<div class="bgc" style="background: #ff0081;"></div>
+					<div class="bgc" style="background: #ff5656;"></div>
+					<div class="bgc" style="background: #c30000;"></div>
+					<div class="bgc" style="background: #00a1bb;"></div>
+					<div class="bgc" style="background: #00f3ff;"></div>
+					<div class="bgc" style="background: #21ff8e;"></div>
+					<div class="bgc" style="background: #00ce10;"></div>
+					<div class="bgc" style="background: #b2ff4c;"></div>
+					<div class="bgc" style="background: #e4ff4f;"></div>
+					<div class="bgc" style="background: #ffd819;"></div>
+					<div class="bgc" style="background: #ffffff;"></div>
+					<div class="bgc" style="background: #000000;"></div>
+				</div>
+			</div>
+			<div class="form-group x-flex-end">
+				<div class="flex x-flex-end msg_area">
+					<label class="btn tips">窗口 3 秒后关闭</label>
+					<label class="btn">新建</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="box flex xy-center">
+		<div>
+			<div class="form-group">
+				<label>帮助手册</label>
+			</div>
+			<div class="help-docs">
+				<p>1、双击 W 收集链接信息</p>
+				<p>2、双击 E 创建云奁</p>
+				<p>3、双击 R 查看云奁集</p>
+				<p>4、鼠标单击云奁，查看其中的链接信息</p>
+				<p>5、鼠标双击云奁，修改其表述等</p>
+				<p>6、
+					<label class="btn">导出</label>
+					<label class="btn btn-act">导入</label>
+				</p>
+
+					
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="./jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+	// ESC 权重
+</script>

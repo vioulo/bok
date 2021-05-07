@@ -1,0 +1,60 @@
+{
+    "name": "yunlian",
+    "description": "收藏链接",
+    "version": "0.3",
+    "manifest_version": 2,
+
+    "permissions": [
+
+        "tabs",
+        "activeTab",
+        "declarativeContent",
+        "bookmarks",
+        "storage",
+        "unlimitedStorage"
+    ],
+    "browser_action": {
+
+        "default_title": "Oh boy",
+        "default_icon": {
+
+            "16": "imgs/icons/16.png",
+            "32": "imgs/icons/32.png",
+            "48": "imgs/icons/48.png",
+            "128": "imgs/icons/128.png"
+        },
+        "default_popup": "popup.html"
+    },
+    "icons": {
+
+        "16": "imgs/icons/16.png",
+        "32": "imgs/icons/32.png",
+        "48": "imgs/icons/48.png",
+        "128": "imgs/icons/128.png"
+    },
+    "background": {
+        "scripts": [
+            "js/jquery-3.3.1.min.js",
+            "js/background.js"
+        ]
+    },
+    "content_scripts": [
+
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": [
+                "js/jquery-3.3.1.min.js",
+                "js/doubleC.js"
+            ],
+            "css": ["css/main.css"]
+        }
+    ]
+    // "options_ui": {
+    //     "page": "pages/links.html",
+    //     "open_in_tab": true
+    // }
+// 代码注入的时间，可选值： document_start, document_end, or document_idle，最后一个表示页面空闲时，默认document_idle
+// "run_at": "document_idle"
+// "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
+
+}

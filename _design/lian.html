@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>box</title>
+	<style type="text/css">
+
+		* {
+
+			font-size: 13px;
+			letter-spacing: 1px;
+		}
+
+		input,button,select,textarea { outline: none; }
+
+		.flex {
+
+			display: flex !important;
+		}
+		.xy-center {
+
+			align-items: center !important;
+			justify-content: center !important;
+		}
+		.x-flex-end {
+
+			justify-content: flex-end !important;
+		}
+		.y-flex-end {
+
+			align-items: flex-end !important;
+		}
+		.x-sb {
+
+    		justify-content: space-between !important;
+		}
+		.ibk {
+
+			display: inline-block !important;
+		}
+		.switch {
+
+			display: inline-block;
+		}
+		.switch .btn {
+			margin: 0;
+		}
+
+		/*-------------------------------------*/
+		.box {
+			min-width: 600px;
+			max-width: 1000px;
+			height: 320px;
+			border: 1px solid #efeeee;
+			border-radius: 4px;
+
+			margin: 2rem auto;
+		}
+		#box:hover {
+
+			box-shadow: 0px 1px 1px 6px #ebfbff;
+		}
+		.cont {
+
+			height: 300px;
+			padding: 1rem;
+		}
+		.cont .btn {
+
+			margin-bottom: 0.5rem;
+		}
+
+		.form-group {
+
+			margin: 1rem;
+			display: flex;
+    		align-items: center;
+		}
+		.finput {
+
+			width: 240px;
+			height: 20px;
+			border: 1px solid #ccc;
+			border-radius: 2px;
+		}
+		.finput:focus {
+
+			border-color: #66afe9;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+		}
+		.cloud-box {
+			position: relative;
+		}
+		.cloud-box-tips {
+
+			align-self: flex-start;
+			border: 1px solid #ccc;
+			border-top: none;
+			position: absolute;
+			right: 10px;
+			padding: 0 3px;
+			font-size: 12px;
+			cursor: pointer;
+		}
+		.btn {
+
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 2px;
+			padding: 2px 1rem;
+			cursor: pointer;
+			user-select: none;
+		}
+		.btn:hover {
+
+			border-color: #12adc5;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+		}
+		.btn-act {
+
+			background: #00adff;
+			border-color: #00adff;
+			color: #fff;
+		}
+		.msg_area, .bgc-group {
+
+			width: 246px;
+		}
+		.bgc {
+
+			width: 11px;
+			height: 17px;
+			border: 1px solid;
+			border-radius: 2px;
+			cursor: pointer;
+		}
+		.bgc:hover {
+
+			border: 1px dashed;
+		}
+
+		.tips {
+
+			margin-right: 1rem;
+		}
+
+		/*---------------------------------------------------*/
+		.cont-left, .cont-right {
+
+			padding: 0 1rem;
+			overflow-y: scroll;
+		}
+		.cont-right {
+
+			width: 786px;
+		}
+		.lian-item {
+
+			border: 1px solid #ccc;
+			border-radius: 2px;
+			padding: 2px 1rem;
+			cursor: pointer;
+			user-select: none;
+			margin-bottom: 0.5rem;
+		}
+
+		.cont-left .lian-item {
+
+			max-width: 130px;
+		}
+
+		.cont-right .lian-item {
+
+			border: none;
+			border-bottom: 1px solid #ddd;
+			border-radius: 0;
+			background: #f7f7f7;
+		}
+		.cont-left .lian-item:hover {
+
+			border-color: #12adc5;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+		}
+		.cont-right .lian-item:hover {
+
+			border-color: #12adc5;
+		}
+		::-webkit-scrollbar {
+			
+			width: 9px;
+			/*height: 16px;*/
+			background-color: #ffffff;
+		}
+		 
+		/*定义滚动条轨道 内阴影+圆角*/
+		::-webkit-scrollbar-track {
+
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+			border-radius: 2px;
+			background-color: #ffffff;
+		}
+		 
+		/*定义滑块 内阴影+圆角*/
+		::-webkit-scrollbar-thumb {
+
+			border-radius: 2px;
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+			background-color: #adfdff;
+		}
+
+
+		/*2021 0215 2232*/
+		.btn {
+			position: relative;
+		}
+		.m-point {
+			position: absolute;
+			width: 8px;
+			height: 8px;
+			
+		}
+		.pt-del {
+			top: -4px;
+			right: -2px;
+			border-radius: 8px;
+			background: #ff3434;
+			box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(255 22 22 / 60%);
+		}
+		.pt-edit {
+			top: -4px;
+			right: 10px;
+			border-radius: 8px;
+			background: #002bff;
+			box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(0 255 100 / 60%);
+		}
+		.m-point {
+			display: none;
+		}
+		.btn:hover>.m-point {
+			display: unset;
+		}
+		.pt-del:hover .btn {
+			border-color: red;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="box">
+		<div class="cont">
+			<label class="btn">穿过那片小树林</label>
+			<label class="btn">蒸汽时代</label>
+			<label class="btn">未来之城</label>
+			<label class="btn">参考信息</label>
+			<label class="btn">缓存区</label>
+			<label class="btn">齿轮</label>
+			<label class="btn">翠萤</label>
+			<label class="btn">动漫</label>
+			<label class="btn">短视频</label>
+			<label class="btn">
+				<point class="m-point pt-edit"></point>
+				<point class="m-point pt-del"></point>
+				<font>小说</font>
+			</label>
+		</div>
+	</div>
+
+	<div class="box">
+		<div class="cont flex">
+			<div class="cont-left">
+				<div class="lian-item">穿过那片小树林</div>
+				<div class="lian-item">蒸汽时代</div>
+				<div class="lian-item">未来之城</div>
+				<div class="lian-item">参考信息</div>
+				<div class="lian-item">缓存区</div>
+				<div class="lian-item">齿轮</div>
+				<div class="lian-item">翠萤</div>
+				<div class="lian-item">动漫</div>
+				<div class="lian-item">短视频</div>
+				<div class="lian-item">小说</div>
+
+				<div class="lian-item">穿过那片小树林</div>
+				<div class="lian-item">蒸汽时代</div>
+				<div class="lian-item">未来之城</div>
+				<div class="lian-item">参考信息</div>
+				<div class="lian-item">缓存区</div>
+				<div class="lian-item">齿轮</div>
+				<div class="lian-item">翠萤</div>
+				<div class="lian-item">动漫</div>
+				<div class="lian-item">短视频</div>
+				<div class="lian-item">小说</div>
+				<div class="lian-item">穿过那片小树林</div>
+				<div class="lian-item">蒸汽时代</div>
+				<div class="lian-item">未来之城</div>
+				<div class="lian-item">参考信息</div>
+				<div class="lian-item">缓存区</div>
+				<div class="lian-item">齿轮</div>
+				<div class="lian-item">翠萤</div>
+				<div class="lian-item">动漫</div>
+				<div class="lian-item">短视频</div>
+				<div class="lian-item">小说</div>
+			</div>
+			<div class="cont-right">
+				<div class="lian-item">
+					<a href="salt.gold">穿过那片小树林</a>
+				</div>
+				<div class="lian-item">蒸汽时代</div>
+				<div class="lian-item">未来之城</div>
+				<div class="lian-item">参考信息</div>
+				<div class="lian-item">缓存区</div>
+				<div class="lian-item">齿轮</div>
+				<div class="lian-item">翠萤</div>
+				<div class="lian-item">动漫</div>
+				<div class="lian-item">短视频</div>
+				<div class="lian-item">小说</div>
+
+				<div class="lian-item">穿过那片小树林</div>
+				<div class="lian-item">蒸汽时代</div>
+				<div class="lian-item">未来之城</div>
+				<div class="lian-item">参考信息</div>
+				<div class="lian-item">缓存区</div>
+				<div class="lian-item">齿轮</div>
+				<div class="lian-item">翠萤</div>
+				<div class="lian-item">动漫</div>
+				<div class="lian-item">短视频</div>
+				<div class="lian-item">小说</div>
+				<div class="lian-item">穿过那片小树林</div>
+				<div class="lian-item">蒸汽时代</div>
+				<div class="lian-item">未来之城</div>
+				<div class="lian-item">参考信息</div>
+				<div class="lian-item">缓存区</div>
+				<div class="lian-item">齿轮</div>
+				<div class="lian-item">翠萤</div>
+				<div class="lian-item">动漫</div>
+				<div class="lian-item">短视频</div>
+				<div class="lian-item">小说</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="box">
+		<div class="cont flex">
+			<div class="cont-left">
+				<div class="lian-item">穿过那片小树林</div>
+				<div class="lian-item">蒸汽时代</div>
+				<div class="lian-item">未来之城</div>
+				<div class="lian-item">参考信息</div>
+				<div class="lian-item">缓存区</div>
+				<div class="lian-item">齿轮</div>
+				<div class="lian-item">翠萤</div>
+				<div class="lian-item">动漫</div>
+				<div class="lian-item">短视频</div>
+				<div class="lian-item">小说</div>
+
+				<div class="lian-item">穿过那片小树林</div>
+				<div class="lian-item">蒸汽时代</div>
+				<div class="lian-item">未来之城</div>
+				<div class="lian-item">参考信息</div>
+				<div class="lian-item">缓存区</div>
+				<div class="lian-item">齿轮</div>
+				<div class="lian-item">翠萤</div>
+				<div class="lian-item">动漫</div>
+				<div class="lian-item">短视频</div>
+				<div class="lian-item">小说</div>
+			</div>
+			<div class="cont-right">
+				<div class="form-group">
+					<label>云钥：</label>
+					<input type="text" class="finput" name="lian">
+					<label class="btn btn-act" style="margin-left: 1rem;margin-bottom: 0;">确认</label>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="./jquery-3.3.1.min.js"></script>
