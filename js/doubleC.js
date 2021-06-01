@@ -558,7 +558,7 @@ function new_link() {
 
 	let the_time = get_timestamp();
 	let obj = {bgc:'#ffffff', created_at:the_time, key:'', line:dbox, lock:0, qty:1, updated_at:the_time};
-	let kid = _new_dbox(obj, false);
+	let kid = _new_dbox(obj, false)['id'];
 
 	links[links_len] = {aox:kid, box:kid, created_at:the_time, icon:icon, link:dlnk, title:dtle, updated_at:the_time};
 	sor.set('links', links);
@@ -623,13 +623,14 @@ function update_link() {
 	}
 	
 	the_time = get_timestamp();
-// xxxxxxxxxxxxxxxxxxxxxxxx 整个代码的逻辑得优化
+
 	if (dbox != the_box.line) {
 
 		$(".update-link").after("<ibk class='butn cancel-ul'>取消</ibk>");
 		$(".update-link").addClass("dye");
 		
-		let num = 10;
+		// 对 box 新建、以及存在的检查 要分开
+		let num = 5;
 		function dc_num() {
 
 			if (num == 0) {
@@ -640,14 +641,16 @@ function update_link() {
 				$(".update-link").removeClass("dye");
 
 				let nbox_obj = {bgc:'#ffffff', created_at:the_time, key:'', line:dbox, lock:0, qty:1, updated_at:the_time};
-				let nbox = _new_dbox(nbox_obj, false); // 这里的返回得推敲 xxxxxxxxxxxxxxxxxxxxxxxxx
+				let nbox = _new_dbox(nbox_obj, false);
 				if (nbox.status == true) {
 
 					links[lid] = {aox:kid, box:nbox.id, created_at:the_link.created_at, icon:the_link.icon, link:link.link, title:link.title, updated_at:the_time};
 					sor.set("links", links);
 				}
 				
-				return show_tips(nbox.msg);
+				$(".update-link").attr("cargo", "yes");
+
+				return show_tips("更新成功！");
 			};
 
 			show_tips(`${num} 秒后将新建：${dbox}`);
@@ -904,12 +907,13 @@ function _new_dbox(dbox, reMsg) {
 
 			if (reMsg) {
 
-				return show_tips('云奁已经存在'); // 新建盒子的时候，这里会返回；新建链接的时候这里会放开
+				show_tips('云奁已经存在'); // 新建盒子的时候，这里会返回；新建链接的时候这里会放开
+				return { 'status': false };
 			}
 			temp['qty'] += 1;
 			
 			_update_dbox(kid, temp, false);
-			return kid;
+			return { 'status': true, 'id': kid };
 		}
 	}
 
@@ -920,7 +924,7 @@ function _new_dbox(dbox, reMsg) {
 		show_tips('添加成功');
 	}
 
-	return lens;
+	return { 'status': true, 'id': lens };
 }
 
 function update_dbox() {
