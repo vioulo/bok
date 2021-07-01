@@ -3,7 +3,13 @@
     "description": "收藏链接",
     "version": "0.3",
     "manifest_version": 2,
-
+    "omnibox": { "keyword" : "yun" },
+    "options_page": "./pages/options.html",
+    // "options_ui": {
+    // 	"page": "./pages/options.html",
+	// 	// 添加一些默认的样式，推荐使用
+    // 	"chrome_style": true
+	// },
     "permissions": [
 
         "tabs",
@@ -48,7 +54,10 @@
             ],
             "css": ["css/main.css"]
         }
-    ]
+    ],
+    "chrome_url_overrides" : {
+        "bookmarks": "./pages/bookmarks.html"
+    }
     // "options_ui": {
     //     "page": "pages/links.html",
     //     "open_in_tab": true
