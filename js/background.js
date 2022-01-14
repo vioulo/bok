@@ -3,6 +3,8 @@
 // 	sendResponse(123);
 // })
 
+// importScripts("background/main.js");
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log('收到来自content-script的消息：');
     console.log(request, sender, sendResponse);

@@ -1,2 +1,2 @@
-# yunlian
-A Chrome extension for collecting web links
+# bok
+A browser extension for collecting web links
