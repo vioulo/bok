@@ -206,7 +206,7 @@
     position: relative;
     text-align: left;
 }
-.box-back, .box-exit {
+.box-go-back, .box-exit {
     width: 9px;
     height: 9px;
     border-radius: 2px;
@@ -214,13 +214,13 @@
     cursor: pointer;
     z-index: 100;
 }
-.box-back {
+.box-go-back {
     display: none;
     top: 5px;
     right: 24px;
     background: #00ce10;
 }
-.box-back:hover {
+.box-go-back:hover {
     background: #00f3ff;
 }
 .box-exit {
@@ -413,10 +413,6 @@
 .link-item img {
     width: 16px;
     margin-right: 10px;
-}
-.oYlock .butn {
-    margin: 0;
-    margin-left: 8px;
 }
 .ib-scroll::-webkit-scrollbar {
     
