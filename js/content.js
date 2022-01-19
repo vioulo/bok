@@ -392,7 +392,7 @@ function new_link() {
             let box = sor.get("dbox");
             let box_title = box[link_has]['line'];
             
-            return show_tips(`存在于-<${box_title}>`);
+            return show_tips(`存在于-<${box_title}>`, false);
         }
     }
     let current = tool.timestamp;
@@ -401,7 +401,7 @@ function new_link() {
     links[links_len] = { aox:kid, box:kid, created_at:current, icon:icon, link:dlnk, title:dtle, updated_at:current };
     console.log(links[links_len]);
     sor.set('links', links);
-    show_tips('添加成功');
+    show_tips('添加成功', true);
 }
 
 function update_link() {
@@ -410,13 +410,13 @@ function update_link() {
     let dtle = $(".b-fgp .dtle").val();
     let dlnk = $(".b-fgp .dlnk").val();
     if (!dbox) {
-        return show_tips("请输入云奁名称");
+        return show_tips("请输入云奁名称", false);
     }
     if (!dtle) {
-        return show_tips("请输入标题");
+        return show_tips("请输入标题", false);
     }
     if (!dlnk) {
-        return show_tips("请输入链接");
+        return show_tips("请输入链接", false);
     }
     let link = {box:dbox, link:dlnk, title:dtle};
     let kid = $(".update-link").attr("kid");
@@ -436,7 +436,7 @@ function update_link() {
     }
     
     if (!update_link) {
-        return show_tips("未更新信息");
+        return show_tips("未更新信息", false);
     }
     
     let current = tool.timestamp;
@@ -462,7 +462,7 @@ function update_link() {
         icon:the_link.icon, link:link.link, title:link.title, updated_at:current
     };
     sor.set("links", links);
-    return show_tips("更新成功");
+    return show_tips("更新成功", true);
 }
 
 function show_box(kid) {
@@ -588,10 +588,10 @@ function check_dbox() {
     let bgc = $(".bb-act").parent().attr('bindex');
     let line_len = line.length;
     if (line_len == 0) {
-        return show_tips('云奁名称不能为空');
+        return show_tips('云奁名称不能为空', false);
     }
     if (line_len > 16) {
-        return show_tips('云奁名称 16 个字符内');
+        return show_tips('云奁名称 16 个字符内', false);
     }
     let current = tool.timestamp;
     return {bgc:bgc, created_at:current, line:line, qty:0, updated_at:current};
@@ -623,7 +623,7 @@ function _new_dbox(dbox, reMsg) {
         }
         if (b_has) {
             if (reMsg) {
-                show_tips('云奁已经存在'); // 新建盒子的时候，这里会返回；添加链接的时候这里会放开
+                show_tips('云奁已经存在', false); // 新建盒子的时候，这里会返回；添加链接的时候这里会放开
                 return {'status':false};
             }
             temp['qty'] += 1;
@@ -634,7 +634,7 @@ function _new_dbox(dbox, reMsg) {
     data[lens] = dbox;
     sor.set('dbox', data);
     if (reMsg) {
-        show_tips('添加成功');
+        show_tips('添加成功', true);
     }
     return {'status':true, 'id':lens};
 }
@@ -649,7 +649,7 @@ function _update_dbox(kid, dbox, reMsg) {
     let list = sor.get('dbox');
     let item = list[kid];
     if (!item) {
-        return show_tips('当前盒子已经笑死了！');
+        return show_tips('当前盒子已经消失了！', true);
     }
     let update = false;
     for (let i in dbox) {
@@ -659,7 +659,7 @@ function _update_dbox(kid, dbox, reMsg) {
         }
     }
     if (!update) {
-        return show_tips('未更新内容');
+        return show_tips('未更新内容', false);
     }
     dbox.updated_at = tool.timestamp;
     delete list[kid];
@@ -674,16 +674,21 @@ function _update_dbox(kid, dbox, reMsg) {
                 }
             });
         }
-        return show_tips('更新成功');
+        return show_tips('更新成功', true);
     }
 }
 
-function show_tips(msg) {
-    $(".bpx .tips").text(msg);
-    $(".bpx .tips").removeClass('dye');
-    // setTimeout(function() {
-    //     $(".bpx .tips").addClass('dye');
-    // }, 3200);
+function show_tips(msg, alone) {
+    if (!alone) {
+        $(".bpx .tips").text(msg);
+        $(".bpx .tips").removeClass('dye');
+        return;
+    }
+    $(".bpx").empty();
+    $(".bpx").append(`<div class="flex xy-center alone-msg">--- ${msg} ---</div>`);
+    setTimeout(function() {
+        $(".bpx").remove();
+    }, 2000);
 }
 
 function get_site_icon() {

@@ -140,6 +140,13 @@
 .msg_area, .bgc-group {
     width: 252px;
 }
+.alone-msg {
+    height: 50px;
+    background: #6223f9;
+    color: #fff;
+    width: 100%;
+    font-size: 16px;
+}
 .bgc {
     width: 10px;
     height: 17px;
