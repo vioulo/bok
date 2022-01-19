@@ -540,7 +540,17 @@ function show_box(kid) {
 }
 
 function del_link(kid, lid) {
-    console.log(kid, lid);
+    let links = sor.get("links");
+    let box = sor.get("dbox");
+
+    links[lid]['aox'] = kid;
+    links[lid]['box'] = 999;
+    box[kid]['qty'] -= 1;
+    box[999]['qty'] += 1;
+
+    sor.set('links', links);
+    sor.set('dbox', box);
+    $(`.link-item[lid=${lid}]`).remove();
 }
 
 function recover_link(kid, lid) {
