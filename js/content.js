@@ -346,6 +346,8 @@ function create_link(obj) {
     <point class="box-exit exit-keyW"></point></div>`;
     $("body").append(html);
 
+    get_site_icon();
+
     $(".new-link").on("click", function() {
          new_link();
     });
@@ -391,14 +393,11 @@ function new_link() {
             return show_tips(`存在于-<${box_title}>`);
         }
     }
-    if (!icon) {
-        get_site_icon();
-        icon = $(".site_icon").val();
-    }
     let current = tool.timestamp;
     let obj = {bgc:'#ffffff', created_at:current, line:dbox, qty:1, updated_at:current};
     let kid = _new_dbox(obj, false)['id'];
-    links[links_len] = {aox:kid, box:kid, created_at:current, icon:icon, link:dlnk, title:dtle, updated_at:current};
+    links[links_len] = { aox: kid, box: kid, created_at: current, icon: icon, link: dlnk, title: dtle, updated_at: current };
+    console.log(links[links_len]);
     sor.set('links', links);
     show_tips('添加成功');
 }
@@ -563,8 +562,9 @@ function show_bpx() {
     let lines = sor.get('dbox');
     let lview = '<div class="bpx list-view ib-scroll">';
     if (Object.keys(lines).length > 0) {
-        for (let n of lines) {
-            lview += `<div class="bitem"><ibk>${n.line}</ibk></div>`;
+        for (let i in lines) {
+            if (i == 999) continue;
+            lview += `<div class="bitem"><ibk>${lines[i]['line']}</ibk></div>`;
         }
     }
     $("body").append(lview + '</div>');
@@ -682,13 +682,19 @@ function get_site_icon() {
     if ($("link[rel='icon']").length > 0) {
         url = $("link[rel='icon']").eq(0).attr("href");
     }
-    if ($("link[rel='shortcut icon']").length == 1) {
+    if ($("link[rel='shortcut icon']").length > 0) {
         url = $("link[rel='shortcut icon']").attr("href");
     }
-    let cross = /^http(s)?:\/\/(.*?)\//.exec(url);
-    if (cross != window.location.origin) {
-        url = window.location.origin + "/favicon.ico";
+    if (url.substring(0, 11) == 'data:image/') {
+        $(".site_icon").val(url);
+        return;
     }
+    // let cross = /^http(s)?:\/\/(.*?)\//.exec(url);
+    if (url.substring(0, 4) != 'http') {
+        url = url ? url : '/favicon.ico';
+        url = window.location.origin + url;
+    }
+    console.log(url);
     let canvas = document.createElement("canvas");
     let ctx = canvas.getContext("2d");
     let img = new Image;
