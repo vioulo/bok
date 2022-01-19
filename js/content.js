@@ -533,9 +533,8 @@ function show_box(kid) {
         del_link(kid, lid);
     });
     $('.aBox').on('click', '.emoji-recover', function () {
-        let kid = $(".line-item-act").attr('kid');
         let lid = $(this).parent().attr('lid');
-        recover_link(kid, lid);
+        recover_link(lid);
     });
 }
 
@@ -553,8 +552,25 @@ function del_link(kid, lid) {
     $(`.link-item[lid=${lid}]`).remove();
 }
 
-function recover_link(kid, lid) {
-    console.log('lid:' + lid);
+function recover_link(lid) {
+    let links = sor.get("links");
+    let box = sor.get("dbox");
+    let kid = links[lid]['aox'];
+
+    if (!box[kid]) {
+        console.log('需要恢复到的盒子已经消失不见！');
+        return;
+    }
+
+    links[lid]['aox'] = 999;
+    links[lid]['box'] = kid;
+    box[kid]['qty'] += 1;
+    box[999]['qty'] -= 1;
+
+    sor.set('links', links);
+    sor.set('dbox', box);
+    $(`.link-item[lid=${lid}]`).remove();
+    console.log(`已经恢复到 - ${box[kid]['line']}`);
 }
 
 function inside_right(kid) {
