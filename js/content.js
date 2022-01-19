@@ -485,12 +485,12 @@ function show_box(kid) {
         left_inside += `<div class="line-item ${left_item_class} ${k999}" style="background:${lines[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${lines[i]['line']}</blk></bem><nbr>${lines[i]['qty']}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
-    let cont = `<div class="in-aBox line-list" style="display:flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div><point class="box-exit exit-list"></point></div>`;
+    let cont = `<div class="in-aBox line-list" style="display:flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
     $(".line-btn").css("display", "none");
     $(".aBox").append(cont);
     $(".box-go-back").css('display', 'block');
     $(".box-go-back").on("click", function() {
-        $(this).remove(); // css("display", "none")
+        $(this).css("display", "none")
         $(".line-list").remove(); // css("display", "none");
         $(".line-btn").css("display", "block");
     });
@@ -503,9 +503,6 @@ function show_box(kid) {
         $(".in-aBox-right").empty();
         $(".in-aBox-right").append(right_inside);
         $(".in-aBox-right").attr("kid", kid);
-    });
-    $(".exit-list").on("click", function () {
-        $(".aBox").remove();
     });
     $(".emoji-empty").on("click", function () {
         console.log("清空回收站");
@@ -577,7 +574,7 @@ function inside_right(kid) {
     let links = sor.get('links');
     let insi  = '<div class="empty-box">尚无内容</div>';
     let _ins  = '';
-    let edibk = '<point class="emoji-edit">💎</point><point class="emoji-del">🍆</point>';
+    let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🥬</point>';
     if (kid == 999) {
         edibk = '<point class="emoji-recover" title="恢复">🌿</point>';
     }

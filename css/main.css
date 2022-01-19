@@ -214,9 +214,8 @@
     text-align: left;
 }
 .box-go-back, .box-exit {
-    width: 9px;
-    height: 9px;
-    border-radius: 2px;
+    width: 10px;
+    height: 10px;
     position: absolute;
     cursor: pointer;
     z-index: 100;
@@ -225,18 +224,18 @@
     display: none;
     top: 5px;
     right: 24px;
-    background: #00ce10;
+    background: #5260ff;
 }
 .box-go-back:hover {
-    background: #00f3ff;
+    background: #bcfad8;
 }
 .box-exit {
     top: 5px;
     right: 5px;
-    background: #0ea3ff;
+    background: #8f71ff;
 }
 .box-exit:hover {
-    background: #ff0e0e;
+    background: #ffc822;
 }
 .emoji-edit, .emoji-del {
     position: absolute;
