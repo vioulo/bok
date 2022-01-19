@@ -346,7 +346,9 @@ function create_link(obj) {
     <point class="box-exit exit-keyW"></point></div>`;
     $("body").append(html);
 
-    get_site_icon();
+    if (obj['action'][0] == 'new-link') {
+        get_site_icon();
+    }
 
     $(".new-link").on("click", function() {
          new_link();
@@ -448,7 +450,7 @@ function update_link() {
                 break;
             }
         }
-        if (now_kid == 0) {
+        if (box_id == 0) {
             let nbox_obj = {bgc:'#ffffff', created_at:current, line:dbox, qty:1, updated_at:current};
             box_id = _new_dbox(nbox_obj, false)['id'];
         }
@@ -492,7 +494,6 @@ function show_box(kid) {
         $(".line-list").remove(); // css("display", "none");
         $(".line-btn").css("display", "block");
     });
-    // 给左右两侧的元素绑定事件
     $(".in-aBox-left .line-item").on("click", function() {
         let kid = $(this).attr('kid');
         if ($(".in-aBox-right").attr("kid") == kid) return;
@@ -503,13 +504,13 @@ function show_box(kid) {
         $(".in-aBox-right").append(right_inside);
         $(".in-aBox-right").attr("kid", kid);
     });
-    $(".exit-list").on("click", function() {
+    $(".exit-list").on("click", function () {
         $(".aBox").remove();
     });
-    $(".emoji-empty").on("click", function() {
+    $(".emoji-empty").on("click", function () {
         console.log("清空回收站");
     });
-    $(".emoji-edit").on("click", function() {
+    $('.aBox').on('click', '.emoji-edit', function () {
         let text = $(".line-item-act bem blk").text();
         let kid = $(".line-item-act").attr('kid');
         let lid = $(this).parent().attr("lid");
@@ -526,15 +527,24 @@ function show_box(kid) {
         };
         create_link(obj);
     });
-    $(".emoji-del").on("click", function () {
+    $('.aBox').on('click', '.emoji-del', function () {
         let kid = $(".line-item-act").attr('kid');
         let lid = $(this).parent().attr("lid");
         del_link(kid, lid);
     });
+    $('.aBox').on('click', '.emoji-recover', function () {
+        let kid = $(".line-item-act").attr('kid');
+        let lid = $(this).parent().attr('lid');
+        recover_link(kid, lid);
+    });
 }
 
 function del_link(kid, lid) {
-    console.log("del link");
+    console.log(kid, lid);
+}
+
+function recover_link(kid, lid) {
+    console.log('lid:' + lid);
 }
 
 function inside_right(kid) {
@@ -546,7 +556,6 @@ function inside_right(kid) {
         edibk = '<point class="emoji-recover" title="恢复">🌿</point>';
     }
     if (Object.keys(links).length > 0) {
-        console.log(links);
         for (let i in links) {
             if (links[i]['box'] == kid) {
                 _ins += `<div class="link-item" lid="${i}"><img src="${links[i]['icon']}"><a href="${links[i]['link']}" target='_blank' class="hide-text">${links[i]['title']}</a>${edibk}</div>`;
