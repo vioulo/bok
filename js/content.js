@@ -161,7 +161,7 @@ function keydown_r() {
             if (['0', '999'].includes(i)) {
                 points = '';
             }
-            insi += `<label class="butn" canin="yes" kid="${i}">${points}<font>${dbox[i]['line']}</font></label>`;
+            insi += `<label class="butn" canin="yes" kid="${i}" style="background:${dbox[i]['bgc']}">${points}<font>${dbox[i]['line']}</font></label>`;
         }
     }
 
@@ -293,7 +293,7 @@ function create_dbox(obj) {
         if (obj.bgc == i) {
             bg_active = 'bb-act'; // bgc blink
         }
-        bg_str += `<div class="bgc-bk flex-dc xy-center" bindex="${i}"><div class="bgc-b ${bg_active}"></div><div class="bgc" style="background: ${i};"></div></div>`;
+        bg_str += `<div class="bgc-bk flex-dc xy-center" bindex="${i}"><div class="bgc-b ${bg_active}"></div><div class="bgc" style="background:${i};"></div></div>`;
     }
     let html = `<div class="bpx flex xy-center bpx-kview"><div>
             <div class="b-fgp">
@@ -396,7 +396,7 @@ function new_link() {
     let current = tool.timestamp;
     let obj = {bgc:'#ffffff', created_at:current, line:dbox, qty:1, updated_at:current};
     let kid = _new_dbox(obj, false)['id'];
-    links[links_len] = { aox: kid, box: kid, created_at: current, icon: icon, link: dlnk, title: dtle, updated_at: current };
+    links[links_len] = { aox:kid, box:kid, created_at:current, icon:icon, link:dlnk, title:dtle, updated_at:current };
     console.log(links[links_len]);
     sor.set('links', links);
     show_tips('添加成功');
@@ -416,7 +416,7 @@ function update_link() {
     if (!dlnk) {
         return show_tips("请输入链接");
     }
-    let link = {box: dbox, link: dlnk, title: dtle};
+    let link = {box:dbox, link:dlnk, title:dtle};
     let kid = $(".update-link").attr("kid");
     let lid = $(".update-link").attr("lid");
     let links = sor.get("links");
@@ -456,8 +456,8 @@ function update_link() {
     }
 
     links[lid] = {
-        aox: aox_id, box: box_id, created_at: the_link.created_at,
-        icon: the_link.icon, link: link.link, title: link.title, updated_at: current
+        aox:aox_id, box:box_id, created_at:the_link.created_at,
+        icon:the_link.icon, link:link.link, title:link.title, updated_at:current
     };
     sor.set("links", links);
     return show_tips("更新成功");
@@ -480,14 +480,14 @@ function show_box(kid) {
             k999 = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
-        left_inside += `<div class="line-item ${left_item_class} ${k999}" kid="${i}"><bem>${sign}<blk>${lines[i]['line']}</blk></bem><nbr>${lines[i]['qty']}</nbr></div>`;
+        left_inside += `<div class="line-item ${left_item_class} ${k999}" style="background:${lines[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${lines[i]['line']}</blk></bem><nbr>${lines[i]['qty']}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
-    let cont = `<div class="in-aBox line-list" style="display: flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div><point class="box-exit exit-list"></point></div>`;
+    let cont = `<div class="in-aBox line-list" style="display:flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div><point class="box-exit exit-list"></point></div>`;
     $(".line-btn").css("display", "none");
     $(".aBox").append(cont);
-    $(".box-back").css('display', 'block');
-    $(".box-back").on("click", function() {
+    $(".box-go-back").css('display', 'block');
+    $(".box-go-back").on("click", function() {
         $(this).remove(); // css("display", "none")
         $(".line-list").remove(); // css("display", "none");
         $(".line-btn").css("display", "block");
