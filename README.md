@@ -1,4 +1,4 @@
-# bok
+# <image src="./imgs/icons/128.png" width="96"> BOK ;)
 A browser extension for collecting web links
 
 一个简单的浏览器插件，用来收集链接  
