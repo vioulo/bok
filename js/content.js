@@ -79,7 +79,7 @@ let tool = {
 $(document).on('keyup', function(e) {
     if ($(document.activeElement).attr('type') == "text") return;
     cmd += e.key;
-    let val = cmd.slice(-3);
+    let val = cmd.slice(-3).toLowerCase();
     switch (val) {
         case 'www':
             keydown_w();
@@ -91,10 +91,6 @@ $(document).on('keyup', function(e) {
             break;
         case 'rrr':
             keydown_r();
-            cmd = '';
-            break;
-        case 'hhh':
-            keydown_h();
             cmd = '';
             break;
     }
@@ -208,16 +204,6 @@ function keydown_r() {
     });
     $(".exit-keyR").on("click", function() {
         $(".aBox").remove();
-    });
-}
-
-function keydown_h () {
-    if ($(".help-box").length == 1) return;
-    let box = `<div class="aBox help-box"><point class="box-exit exit-keyH"></point></div>`;
-    $("body").append(box);
-
-    $(".exit-keyH").on("click", function () {
-        $(".help-box").remove();
     });
 }
 

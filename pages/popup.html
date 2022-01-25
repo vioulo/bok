@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body {
+            width: 160px;
+            padding: 20px;
+            margin: 0;
+            background: #2e2e2e;
+            color: #ffffff;
+            text-align: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            margin-bottom: 0.5rem;
+        }
+        .logo .title {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .item {
+            border: 2px solid #efefef;
+            margin: 0.5rem 0;
+            padding: 0.2rem 0;
+            font-size: 16px;
+            letter-spacing: 2;
+            cursor: pointer;
+            user-select: none;
+        }
+        .item:hover {
+            border: 2px solid #576eff;
+            box-shadow: 2px 2px #e8d3ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo">
+        <img src="../imgs/icons/48.png" alt="icon">
+        <div class="title">BOK</div>
+    </div>
+    <div class="descri">一个简单的网页收集器</div>
+    <div class="menu">
+        <div class="item from-bookmark">从书签同步</div>
+        <div class="item from-json">从文件导入</div>
+        <div class="item export">导出到文件</div>
+        <div class="item" id="options">其他选项？</div>
+    </div>
+</body>
+<script type="text/javascript" src="../js/popup.js"></script>
+
+</html>
