@@ -380,9 +380,9 @@ function new_link() {
 }
 
 function update_link() {
-    let dbox = $(".b-fgp .dbox").val();
-    let dtle = $(".b-fgp .dtle").val();
-    let dlnk = $(".b-fgp .dlnk").val();
+    let dbox = $(".b-fgp .dbox").val().trim();
+    let dtle = $(".b-fgp .dtle").val().trim();
+    let dlnk = $(".b-fgp .dlnk").val().trim();
     if (!dbox) {
         return show_tips("请输入云奁名称", false);
     }
@@ -427,7 +427,7 @@ function update_link() {
             }
         }
         if (box_id == 0) {
-            let nbox_obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 1, sort: 0, created_at: current, updated_at: current };
+            let nbox_obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current };
             box_id = _new_dbox(nbox_obj, false)['id'];
             qty_inc = true;
         }
@@ -581,18 +581,20 @@ function show_bpx() {
     if (Object.keys(lines).length > 0) {
         for (let i in lines) {
             if (i == 'b1') continue;
-            lview += `<div class="bitem"><ibk>${lines[i]['line']}</ibk></div>`;
+            lview += `<div class="bitem"><ibk class="hide-text">${lines[i]['line']}</ibk></div>`;
         }
     }
     $("body").append(lview + '</div>');
     $(".list-view ibk").on("click", function() {
-        let text = $(this).text();
-        $(".bpx-cview .dbox").val(text);
+        $(".bpx-cview .dbox").val($(this).text());
+        $(".list-view").remove();
+        $(".bchoose").text("选择");
+        $(".bchoose").attr("is_show", 0);
     });
 }
 
 function check_dbox() {
-    let line = $(".b-fgp .line").val();
+    let line = $(".b-fgp .line").val().trim();
     let bgc = $(".bb-act").parent().attr('bindex');
     let line_len = line.length;
     if (line_len == 0) {
@@ -616,16 +618,6 @@ function _new_dbox(dbox, reMsg) {
     let _data = JSON.stringify(obj);
     let data = JSON.parse(_data);
     // 上面的深拷贝会在底下云奁存在时更新情况用到
-    // var newArray = $.extend(true,[],array); // true为深拷贝，false为浅拷贝
-    // 当数组里面的值是基本数据类型，比如String，Number，Boolean时，属于深拷贝
-    // 当数组里面的值是引用数据类型，比如Object，Array时，属于浅拷贝
-    // var arr1 = ["1","2","3"]; 
-    // var arr2 = arr1.slice(0);
-        // 当value是基本数据类型，比如String，Number，Boolean时，是可以使用拓展运算符进行深拷贝的
-    // 当value是引用类型的值，比如Object，Array，引用类型进行深拷贝也只是拷贝了引用地址，所以属于浅拷贝
-    // var car = {brand: "BMW", price: "380000", length: "5米"}
-    // var car1 = { ...car, price: "500000" }
-
     let keys = Object.keys(data);
     let lens = keys.length;
     let kid  = 'b0';
@@ -678,11 +670,15 @@ function _update_dbox(kid, dbox, reMsg) {
         return;
     }
     let update = false;
-    for (let i in dbox) {
-        if (dbox[i] != item[i]) {
+    let tmp = { line: dbox.line, bgc: dbox.bgc };
+    let new_item = {};
+    for (let i in item) {
+        let val = item[i];
+        if (tmp[i] && item[i] != tmp[i]) {
             update = true;
-            break;
+            val = tmp[i];
         }
+        new_item[i] = val;
     }
     if (!update) {
         if (reMsg) {
@@ -690,17 +686,17 @@ function _update_dbox(kid, dbox, reMsg) {
         }
         return;
     }
-    dbox.updated_at = tool.timestamp;
+    new_item.updated_at = tool.timestamp;
     delete list[kid];
-    list[kid] = dbox;
+    list[kid] = new_item;
     sor.set('dbox', list);
     if (reMsg) {
         // reMsg 仅当从列表编辑的时候为 true
-        if (dbox.line != item.line) {
+        if (new_item.line != item.line) {
             // 如果名称被更新了，则更新打开的列表中的名称
             $(".butn font").each(function() {
                 if ($(this).text() == item.line) {
-                    $(this).text(dbox.line);
+                    $(this).text(new_item.line);
                 }
             });
         }
