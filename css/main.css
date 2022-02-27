@@ -110,10 +110,12 @@
 }
 .list-view ibk {
     display: inline-block;
+    width: 60px;
     border: 1px solid #ccc;
     border-radius: 2px;
     padding: 3px 7px;
     cursor: pointer;
+    text-align: center;
 }
 .list-view ibk:hover {
     border: 1px solid #1f8cfd;
