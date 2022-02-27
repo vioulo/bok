@@ -1,3 +1,5 @@
+"use strict";
+
 let cmd = '';
 // V 20201007 storage manager
 let sor = {
@@ -7,13 +9,12 @@ let sor = {
     creation: function() {
         let time = tool.timestamp;
         let obj = {
-              0 : {bgc:'#ffffff', created_at:time, line:'缓存区', qty:0, updated_at:time},
-            999 : {bgc:'#ffffff', created_at:time, line:'回收站', qty:0, updated_at:time},
+            'b0': { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
+            'b1': { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
         };
         sor.set('dbox', obj);
     },
     init: function() {
-        console.log('init ed');
         chrome.storage.local.get('dbox', function(res) {
             if (Object.keys(res).length > 0) {
                 sor.dbox = res['dbox'];
@@ -104,22 +105,14 @@ $(document).on("keydown", function(e) {
     }
 });
 
-function in_config(key) {
-    let arr = ['q', 'w', 'e', 'r'];
-    if (arr.includes(key)) {
-        return true;
-    }
-    return false;
-}
 
-// new collection
 function keydown_w() {
     if ($(".bpx-cview").length == 1) return;
     $(".bpx").remove();
     let obj = {
         title: '收集链接',
         kid: 0,
-        lid: 1000,
+        lid: 0,
         box: '缓存区',
         link: window.location.href,
         title: document.title,
@@ -150,11 +143,9 @@ function keydown_r() {
     if (Object.keys(dbox).length > 0) {
         insi = '';
         let points = '';
-        // [0, 999].includes(i) 为啥不行 '0' '999' ??
         for (let i in dbox) {
             points = '<point class="m-point pt-edit"></point><point class="m-point pt-del"></point>';
-            // if (i == 0 || i == 999) {
-            if (['0', '999'].includes(i)) {
+            if (['b0', 'b1'].includes(i)) {
                 points = '';
             }
             insi += `<label class="butn" canin="yes" kid="${i}" style="background:${dbox[i]['bgc']}">${points}<font>${dbox[i]['line']}</font></label>`;
@@ -241,11 +232,11 @@ function dbox_discard(id) {
 }
 
 function dbox_recycle(id) {
-    let list = sor.get('dbox');
-    let item = list[id];
+    let box = sor.get('dbox');
+    let item = box[id];
     if (item.qty == 0) {
-        delete list[id];
-        sor.set('dbox', list);
+        delete box[id];
+        sor.set('dbox', box);
         $(`.line-items .butn[kid=${id}]`).remove();
         $(".bg-msg").remove();
         return;
@@ -256,14 +247,13 @@ function dbox_recycle(id) {
     for (let i in links) {
         if (links[i]['box'] == id) {
             links[i]['aox'] = links[i]['box'];
-            links[i]['box'] = 999;
+            links[i]['box'] = 'b1';
             rec_len += 1;
         }
     }
-    // console.log(links); return;
-    delete list[id];
-    list[999]['qty'] += rec_len;
-    sor.set('dbox', list);
+    delete box[id];
+    box['b1']['qty'] += rec_len;
+    sor.set('dbox', box);
     sor.set('links', links);
     $(`.line-items .butn[kid=${id}]`).remove();
     $(".bg-msg").remove();
@@ -365,33 +355,31 @@ function new_link() {
     let dlnk = $(".b-fgp .dlnk").val();
     let icon = $(".site_icon").val();
     let links = sor.get('links');
-    let link_has = '';
+    let link_box = '';
     let links_len = Object.keys(links).length;
     if (links_len > 0) {
         for (let i in links) {
             if (links[i]['link'] == dlnk) {
-                link_has = links[i]['box'];
+                link_box = links[i]['box'];
                 break;
             }
         }
-        if (link_has !== '') {
+        if (link_box !== '') {
             let box = sor.get("dbox");
-            let box_title = box[link_has]['line'];
+            let box_title = box[link_box]['line'];
             
             return show_tips(`存在于-<${box_title}>`, false);
         }
     }
     let current = tool.timestamp;
-    let obj = {bgc:'#ffffff', created_at:current, line:dbox, qty:1, updated_at:current};
+    let obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 1, sort: 0, created_at: current, updated_at: current };
     let kid = _new_dbox(obj, false)['id'];
-    links[links_len] = { aox:kid, box:kid, created_at:current, icon:icon, link:dlnk, title:dtle, updated_at:current };
-    console.log(links[links_len]);
+    links[links_len] = { id: 0, aox:kid, box:kid, title:dtle, link:dlnk, icon:icon, created_at:current, updated_at:current };
     sor.set('links', links);
     show_tips('添加成功', true);
 }
 
 function update_link() {
-    $(".update-link").attr("cargo", "no");
     let dbox = $(".b-fgp .dbox").val();
     let dtle = $(".b-fgp .dtle").val();
     let dlnk = $(".b-fgp .dlnk").val();
@@ -428,26 +416,36 @@ function update_link() {
     let current = tool.timestamp;
     let aox_id = the_link.aox;
     let box_id = kid;
+    let qty_inc = false;
     if (dbox != the_box.line) {
         box_id = 0;
         for (let i in box) {
             if (box[i]['line'] == dbox) {
                 box_id = i;
+                qty_inc = true;
                 break;
             }
         }
         if (box_id == 0) {
-            let nbox_obj = {bgc:'#ffffff', created_at:current, line:dbox, qty:1, updated_at:current};
+            let nbox_obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 1, sort: 0, created_at: current, updated_at: current };
             box_id = _new_dbox(nbox_obj, false)['id'];
+            qty_inc = true;
         }
         aox_id = kid;
     }
 
     links[lid] = {
-        aox:aox_id, box:box_id, created_at:the_link.created_at,
-        icon:the_link.icon, link:link.link, title:link.title, updated_at:current
+        id: the_link.id, aox: aox_id, box: box_id, title: link.title, link: link.link,
+        icon: the_link.icon, created_at: the_link.created_at, updated_at: current
     };
+
     sor.set("links", links);
+    if (qty_inc) {
+        let new_box = sor.get("dbox"); // 在此获取的结果并没有 上面 _new_dbox 的更新数据
+        new_box[kid]['qty'] -= 1;
+        new_box[box_id]['qty'] += 1; // 这里会报错 box_id undefined 重新点击就可以写入新的
+        sor.set("dbox", new_box);
+    }
     return show_tips("更新成功", true);
 }
 
@@ -456,19 +454,20 @@ function show_box(kid) {
     let line_obj = lines[kid];
     let left_inside = '';
     let left_item_class = '';
-    let k999 = '';
-    let sign = '';
+    console.log(lines);
     for (let i in lines) {
+        let rek = '';
+        let sign = '';
         if (lines[i]['line'] == line_obj['line']) {
             left_item_class = 'line-item-act';
         } else {
             left_item_class = '';
         }
-        if (i == 999) {
-            k999 = 'rbin';
+        if (i == 'b1') {
+            rek = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
-        left_inside += `<div class="line-item ${left_item_class} ${k999}" style="background:${lines[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${lines[i]['line']}</blk></bem><nbr>${lines[i]['qty']}</nbr></div>`;
+        left_inside += `<div class="line-item ${left_item_class} ${rek}" style="background:${lines[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${lines[i]['line']}</blk></bem><nbr>${lines[i]['qty']}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
     let cont = `<div class="in-aBox line-list" style="display:flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
@@ -526,9 +525,9 @@ function del_link(kid, lid) {
     let box = sor.get("dbox");
 
     links[lid]['aox'] = kid;
-    links[lid]['box'] = 999;
+    links[lid]['box'] = 'b1';
     box[kid]['qty'] -= 1;
-    box[999]['qty'] += 1;
+    box['b1']['qty'] += 1;
 
     sor.set('links', links);
     sor.set('dbox', box);
@@ -541,14 +540,14 @@ function recover_link(lid) {
     let kid = links[lid]['aox'];
 
     if (!box[kid]) {
-        console.log('需要恢复到的盒子已经消失不见！');
+        console.log('需要恢复到的云奁已经消失不见！');
         return;
     }
 
-    links[lid]['aox'] = 999;
+    links[lid]['aox'] = 'b1';
     links[lid]['box'] = kid;
     box[kid]['qty'] += 1;
-    box[999]['qty'] -= 1;
+    box['b1']['qty'] -= 1;
 
     sor.set('links', links);
     sor.set('dbox', box);
@@ -561,7 +560,7 @@ function inside_right(kid) {
     let insi  = '<div class="empty-box">尚无内容</div>';
     let _ins  = '';
     let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🥬</point>';
-    if (kid == 999) {
+    if (kid == 'b1') {
         edibk = '<point class="emoji-recover" title="恢复">🌿</point>';
     }
     if (Object.keys(links).length > 0) {
@@ -581,7 +580,7 @@ function show_bpx() {
     let lview = '<div class="bpx list-view ib-scroll">';
     if (Object.keys(lines).length > 0) {
         for (let i in lines) {
-            if (i == 999) continue;
+            if (i == 'b1') continue;
             lview += `<div class="bitem"><ibk>${lines[i]['line']}</ibk></div>`;
         }
     }
@@ -603,7 +602,7 @@ function check_dbox() {
         return show_tips('云奁名称 16 个字符内', false);
     }
     let current = tool.timestamp;
-    return {bgc:bgc, created_at:current, line:line, qty:0, updated_at:current};
+    return { id: 0, line: line, bgc: bgc, qty: 0, sort: 0, created_at: current, updated_at: current };
 }
 
 function new_dbox() {
@@ -616,9 +615,20 @@ function _new_dbox(dbox, reMsg) {
     let obj = sor.get('dbox');
     let _data = JSON.stringify(obj);
     let data = JSON.parse(_data);
+    // 上面的深拷贝会在底下云奁存在时更新情况用到
+    // var newArray = $.extend(true,[],array); // true为深拷贝，false为浅拷贝
+    // 当数组里面的值是基本数据类型，比如String，Number，Boolean时，属于深拷贝
+    // 当数组里面的值是引用数据类型，比如Object，Array时，属于浅拷贝
+    // var arr1 = ["1","2","3"]; 
+    // var arr2 = arr1.slice(0);
+        // 当value是基本数据类型，比如String，Number，Boolean时，是可以使用拓展运算符进行深拷贝的
+    // 当value是引用类型的值，比如Object，Array，引用类型进行深拷贝也只是拷贝了引用地址，所以属于浅拷贝
+    // var car = {brand: "BMW", price: "380000", length: "5米"}
+    // var car1 = { ...car, price: "500000" }
 
-    let lens = Object.keys(data).length;
-    let kid  = 0;
+    let keys = Object.keys(data);
+    let lens = keys.length;
+    let kid  = 'b0';
     let temp = '';
     if (lens > 0) {
         let b_has = false;
@@ -632,7 +642,8 @@ function _new_dbox(dbox, reMsg) {
         }
         if (b_has) {
             if (reMsg) {
-                show_tips('云奁已经存在', false); // 新建盒子的时候，这里会返回；添加链接的时候这里会放开
+                // 新建云奁的时候，这里会返回；添加链接的时候这里会放开
+                show_tips('云奁已经存在', false);
                 return {'status':false};
             }
             temp['qty'] += 1;
@@ -640,12 +651,15 @@ function _new_dbox(dbox, reMsg) {
             return {'status':true, 'id':kid};
         }
     }
-    data[lens] = dbox;
+    console.log(dbox);
+    let id = parseInt(/\d+/.exec(keys[lens - 1])) + 1;
+    kid = `b${id}`;
+    data[kid] = dbox;
     sor.set('dbox', data);
     if (reMsg) {
         show_tips('添加成功', true);
     }
-    return {'status':true, 'id':lens};
+    return {'status':true, 'id':kid};
 }
 
 function update_dbox() {
@@ -655,10 +669,13 @@ function update_dbox() {
 }
 
 function _update_dbox(kid, dbox, reMsg) {
-    let list = sor.get('dbox');
+    let list = sor.dbox;
     let item = list[kid];
     if (!item) {
-        return show_tips('当前盒子已经消失了！', true);
+        if (reMsg) {
+            return show_tips('当前云奁已经消失了！', true);
+        }
+        return;
     }
     let update = false;
     for (let i in dbox) {
@@ -668,13 +685,17 @@ function _update_dbox(kid, dbox, reMsg) {
         }
     }
     if (!update) {
-        return show_tips('未更新内容', false);
+        if (reMsg) {
+            return show_tips('未更新内容', false);
+        }
+        return;
     }
     dbox.updated_at = tool.timestamp;
     delete list[kid];
     list[kid] = dbox;
     sor.set('dbox', list);
     if (reMsg) {
+        // reMsg 仅当从列表编辑的时候为 true
         if (dbox.line != item.line) {
             // 如果名称被更新了，则更新打开的列表中的名称
             $(".butn font").each(function() {
