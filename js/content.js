@@ -417,7 +417,9 @@ function update_link() {
     let aox_id = the_link.aox;
     let box_id = kid;
     let qty_inc = false;
+    let ret_box = {};
     if (dbox != the_box.line) {
+        aox_id = kid;
         box_id = 0;
         for (let i in box) {
             if (box[i]['line'] == dbox) {
@@ -428,10 +430,11 @@ function update_link() {
         }
         if (box_id == 0) {
             let nbox_obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current };
-            box_id = _new_dbox(nbox_obj, false)['id'];
+            let ret_db = _new_dbox(nbox_obj, false);
+            ret_box = ret_db['data'];
+            box_id = ret_db['id'];
             qty_inc = true;
         }
-        aox_id = kid;
     }
 
     links[lid] = {
@@ -441,9 +444,9 @@ function update_link() {
 
     sor.set("links", links);
     if (qty_inc) {
-        let new_box = sor.get("dbox"); // 在此获取的结果并没有 上面 _new_dbox 的更新数据
+        let new_box = !ret_box ? sor.get("dbox") : ret_box; // 在此 sor.get() 的结果并没有 上面 _new_dbox 的新增数据 | why? | 通过附带返回结果更新解决这个问题
         new_box[kid]['qty'] -= 1;
-        new_box[box_id]['qty'] += 1; // 这里会报错 box_id undefined 重新点击就可以写入新的
+        new_box[box_id]['qty'] += 1;
         sor.set("dbox", new_box);
     }
     return show_tips("更新成功", true);
@@ -643,7 +646,6 @@ function _new_dbox(dbox, reMsg) {
             return {'status':true, 'id':kid};
         }
     }
-    console.log(dbox);
     let id = parseInt(/\d+/.exec(keys[lens - 1])) + 1;
     kid = `b${id}`;
     data[kid] = dbox;
@@ -651,7 +653,7 @@ function _new_dbox(dbox, reMsg) {
     if (reMsg) {
         show_tips('添加成功', true);
     }
-    return {'status':true, 'id':kid};
+    return {'status':true, 'id':kid, 'data':data};
 }
 
 function update_dbox() {
@@ -670,7 +672,7 @@ function _update_dbox(kid, dbox, reMsg) {
         return;
     }
     let update = false;
-    let tmp = { line: dbox.line, bgc: dbox.bgc };
+    let tmp = { line: dbox.line, bgc: dbox.bgc, qty: dbox.qty };
     let new_item = {};
     for (let i in item) {
         let val = item[i];
