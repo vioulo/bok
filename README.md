@@ -12,17 +12,17 @@ A browser extension for collecting web links
 此外可以对链接进行编辑、移入回收站；可以将盒子删除、回收等  
 
 计划中的功能：  
-<input type="checkbox" disabled>添加 `hhh` 帮助内容 -x- 去掉这个功能  
-<input type="checkbox" checked>调整储存的数据结构  
-<input type="checkbox">添加清空回收站的功能  
-<input type="checkbox">添加浏览器收藏夹的导入、以及此插件的导出功能  
-<input type="checkbox">调整代码中的一些文本内容  
-<input type="checkbox">美化样式  
-<input type="checkbox">安装、卸载相关的操作  
-<input type="checkbox">搜索栏的一些交互操作  
-<input type="checkbox">建立同步服务  
-<input type="checkbox">添加多语言支持  
-<input type="checkbox">添加独立标签页面  
+✖️ 添加 `hhh` 帮助内容 -x- 去掉这个功能  
+✅ 调整储存的数据结构  
+⬜️ 添加清空回收站的功能  
+⬜️ 添加浏览器收藏夹的导入、以及此插件的导出功能  
+⬜️ 调整代码中的一些文本内容  
+⬜️ 美化样式  
+⬜️ 安装、卸载相关的操作  
+⬜️ 搜索栏的一些交互操作  
+⬜️ 建立同步服务  
+⬜️ 添加多语言支持  
+⬜️ 添加独立标签页面  
 
 其他想到的后面添到这里吧！  
 从想法到实现确实很难，前前后后虽然写的时间不多，但是时间跨度挺大  
