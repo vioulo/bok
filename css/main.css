@@ -329,6 +329,7 @@
     border-color: #8e8e8e;
 }
 .in-aBox-left, .in-aBox-right {
+    overflow-x: hidden;
     overflow-y: scroll;
 }
 .in-aBox-left {
