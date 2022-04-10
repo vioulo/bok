@@ -31,6 +31,7 @@ let sor = {
     set: function(key, value) {
         let obj = {};
         obj[key] = value;
+        sor.rem(key);
         // chrome.storage.local.set({key: value}, function() {
         chrome.storage.local.set(obj, function() {
             sor.init();
@@ -444,7 +445,7 @@ function update_link() {
 
     sor.set("links", links);
     if (qty_inc) {
-        let new_box = !ret_box ? sor.get("dbox") : ret_box; // 在此 sor.get() 的结果并没有 上面 _new_dbox 的新增数据 | why? | 通过附带返回结果更新解决这个问题
+        let new_box = !Object.keys(ret_box).length ? box : ret_box; // 在此 sor.get() 的结果并没有 上面 _new_dbox 的新增数据 | why? | 通过附带返回结果更新解决这个问题
         new_box[kid]['qty'] -= 1;
         new_box[box_id]['qty'] += 1;
         sor.set("dbox", new_box);
@@ -477,11 +478,13 @@ function show_box(kid) {
     $(".line-btn").css("display", "none");
     $(".aBox").append(cont);
     $(".box-go-back").css('display', 'block');
+
     $(".box-go-back").on("click", function() {
         $(this).css("display", "none")
         $(".line-list").remove(); // css("display", "none");
         $(".line-btn").css("display", "block");
     });
+
     $(".in-aBox-left .line-item").on("click", function() {
         let kid = $(this).attr('kid');
         if ($(".in-aBox-right").attr("kid") == kid) return;
@@ -492,8 +495,20 @@ function show_box(kid) {
         $(".in-aBox-right").append(right_inside);
         $(".in-aBox-right").attr("kid", kid);
     });
+
     $(".emoji-empty").on("click", function () {
-        console.log("清空回收站");
+        let el_bg_msg = `<div class="flex xy-center bg-msg"><div class="flex-dc xy-center bg-msg-inner" ><div class="title">清空回收站？ 🚀</div>
+        <div class="btn-group"><ibk class="butn ey-confirm">确认</ibk><ibk class="butn ey-cancel">取消</ibk></div></div></div>`;
+
+        $(".in-aBox.line-list").append(el_bg_msg);
+
+        $(".ey-confirm").on("click", function () {
+            empty_trash();
+        });
+
+        $(".ey-cancel").on("click", function () {
+            $(".bg-msg").remove();
+        });
     });
     $('.aBox').on('click', '.emoji-edit', function () {
         let text = $(".line-item-act bem blk").text();
@@ -521,6 +536,31 @@ function show_box(kid) {
         let lid = $(this).parent().attr('lid');
         recover_link(lid);
     });
+}
+
+function empty_trash() {
+    let box = sor.get('dbox');
+    for (let i in box) {
+        if (i == 'b1') {
+            box[i]['qty'] = 0;
+            break;
+        }
+    }
+    console.log(box);
+    sor.set('dbox', box);
+    let link = sor.get('links');
+    for (let l in link) {
+        if (link[l]['box'] == 'b1') {
+            delete link[l];
+        }
+    }
+    console.log(link);
+    sor.set('links', link);
+
+    $(".bg-msg").remove();
+    $(".rbin nbr").text(0);
+    $(".in-aBox-right").empty();
+    $(".in-aBox-right").append('<div class="empty-box">尚无内容</div>');
 }
 
 function del_link(kid, lid) {
@@ -560,6 +600,7 @@ function recover_link(lid) {
 
 function inside_right(kid) {
     let links = sor.get('links');
+    console.log(links);
     let insi  = '<div class="empty-box">尚无内容</div>';
     let _ins  = '';
     let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🥬</point>';
