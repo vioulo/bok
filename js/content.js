@@ -31,6 +31,7 @@ let sor = {
     set: function(key, value) {
         let obj = {};
         obj[key] = value;
+        sor.rem(key);
         // chrome.storage.local.set({key: value}, function() {
         chrome.storage.local.set(obj, function() {
             sor.init();
@@ -444,7 +445,7 @@ function update_link() {
 
     sor.set("links", links);
     if (qty_inc) {
-        let new_box = !ret_box ? sor.get("dbox") : ret_box; // 在此 sor.get() 的结果并没有 上面 _new_dbox 的新增数据 | why? | 通过附带返回结果更新解决这个问题
+        let new_box = !Object.keys(ret_box).length ? box : ret_box; // 在此 sor.get() 的结果并没有 上面 _new_dbox 的新增数据 | why? | 通过附带返回结果更新解决这个问题
         new_box[kid]['qty'] -= 1;
         new_box[box_id]['qty'] += 1;
         sor.set("dbox", new_box);
