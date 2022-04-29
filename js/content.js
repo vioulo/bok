@@ -155,7 +155,7 @@ function keydown_r() {
         }
     }
 
-    let box = `<div class="aBox"><div class="in-aBox line-btn"><div class="line-items">${insi}</div></div><point class="box-go-back"></point><point class="box-exit exit-keyR"></point></div>`;
+    let box = `<div class="aBox"><div class="in-aBox line-btn"><div class="bxf4e19973e-lines bxf4e19973e-gc-10">${insi}</div></div><point class="box-go-back"></point><point class="box-exit exit-keyR"></point></div>`;
     $("body").append(box);
     $(".in-aBox .butn").on("click", function() {
         if ($(this).attr("canin") == "yes") {
@@ -223,7 +223,7 @@ function dbox_discard(id) {
     let list = sor.get('dbox');
     delete list[id];
     sor.set('dbox', list);
-    $(`.line-items .butn[kid=${id}]`).remove();
+    $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
     $(".bg-msg").remove();
     let links = sor.get("links");
     for (let i in links) {
@@ -240,7 +240,7 @@ function dbox_recycle(id) {
     if (item.qty == 0) {
         delete box[id];
         sor.set('dbox', box);
-        $(`.line-items .butn[kid=${id}]`).remove();
+        $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
         $(".bg-msg").remove();
         return;
     }
@@ -258,7 +258,7 @@ function dbox_recycle(id) {
     box[1]['qty'] += rec_len;
     sor.set('dbox', box);
     sor.set('links', links);
-    $(`.line-items .butn[kid=${id}]`).remove();
+    $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
     $(".bg-msg").remove();
 }
 
@@ -610,9 +610,16 @@ function inside_right(kid) {
         edibk = '<point class="emoji-recover" title="恢复">🌿</point>';
     }
     if (Object.keys(links).length > 0) {
+        let icon = '';
+        let word = '';
         for (let i in links) {
             if (links[i]['box'] == kid) {
-                _ins += `<div class="link-item" lid="${i}"><img src="${links[i]['icon']}"><a href="${links[i]['link']}" target='_blank' class="hide-text">${links[i]['title']}</a>${edibk}</div>`;
+                word = links[i]['title'].substring(0, 1);
+                icon = `<div class="img-space">${word}</div>`;
+                if (links[i]['icon'] != '') {
+                    icon = `<img src="${links[i]['icon']}">`;
+                }
+                _ins += `<div class="link-item" lid="${i}">${icon}<a href="${links[i]['link']}" target='_blank' class="hide-text">${links[i]['title']}</a>${edibk}</div>`;
             }
         }
     }
