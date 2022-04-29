@@ -7,7 +7,7 @@ let sor = {
     links: {},
     dbox_max: 100,
     creation: function() {
-        let time = tool.timestamp;
+        let time = (new Date()).valueOf();
         let obj = [
             { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
             { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
@@ -55,7 +55,6 @@ let sor = {
 sor.init();
 
 let tool = {
-    timestamp: (new Date()).valueOf(),
     dateformat: (fmt, date) => {
         let ret;
         const opt = {
@@ -96,6 +95,30 @@ $(document).on('keyup', function(e) {
             cmd = '';
             break;
     }
+});
+
+let _back = 0;
+$(document).on('keydown', function (e) {
+    // left 37 | a 65
+    if (e.keyCode == 37 || e.keyCode == 65) {
+        setTimeout(() => {
+            _back = 0;
+        }, 1000);
+        if (_back < 1) {
+            _back++;
+            return;
+        }
+        if (_back > 1) {
+            _back = 0;
+        }
+        if (_back == 1) {
+            if ($('.line-list').length) {
+                $('.line-list').addClass('dye');
+                $('.line-btn').removeClass('dye');
+            }
+        }
+    }
+    // right 39 | d 68
 });
 
 $(document).on("keydown", function(e) {
@@ -155,7 +178,7 @@ function keydown_r() {
         }
     }
 
-    let box = `<div class="aBox"><div class="in-aBox line-btn"><div class="bxf4e19973e-lines bxf4e19973e-gc-10">${insi}</div></div><point class="box-go-back"></point><point class="box-exit exit-keyR"></point></div>`;
+    let box = `<div class="aBox"><div class="in-aBox line-btn"><div class="bxf4e19973e-lines bxf4e19973e-gc-10">${insi}</div></div></div>`;
     $("body").append(box);
     $(".in-aBox .butn").on("click", function() {
         if ($(this).attr("canin") == "yes") {
@@ -195,9 +218,6 @@ function keydown_r() {
         let kid = $(this).parent().attr('kid');
         let text = $(this).next().text();
         remove_dbox_view(kid, text);
-    });
-    $(".exit-keyR").on("click", function() {
-        $(".aBox").remove();
     });
 }
 
@@ -293,7 +313,7 @@ function create_dbox(obj) {
                     <ibk class="butn ${obj.action[0]}">${obj.action[1]}</ibk>
                 </div>
             </div>
-        </div><point class="box-exit exit-dbox"></point></div>`;
+        </div></div>`;
     $("body").append(html);
     $(".bgc-bk").on("click", function() {
         let aim = $(this).find('.bgc-b');
@@ -321,8 +341,7 @@ function create_link(obj) {
     <div class="b-fgp"><ibk>链接：</ibk><input type="text" class="input dlnk" value="${obj['link']}"></div>
     <div class="b-fgp dye"><ibk>icon：</ibk><input type="hidden" class="input site_icon" value=""></div>
     <div class="b-fgp x-flex-end"><div class="flex x-flex-end msg_area"><ibk class="butn tips hide-text dye"></ibk>
-    <ibk class="butn ${obj['action'][0]}" kid="${obj['kid']}" lid="${obj['lid']}">${obj['action'][1]}</ibk></div></div></div>
-    <point class="box-exit exit-keyW"></point></div>`;
+    <ibk class="butn ${obj['action'][0]}" kid="${obj['kid']}" lid="${obj['lid']}">${obj['action'][1]}</ibk></div></div></div></div>`;
     $("body").append(html);
 
     if (obj['action'][0] == 'new-link') {
@@ -374,7 +393,7 @@ function new_link() {
             return show_tips(`存在于-<${box_title}>`, false);
         }
     }
-    let current = tool.timestamp;
+    let current = (new Date()).valueOf();
     let obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 1, sort: 0, created_at: current, updated_at: current };
     let kid = _new_dbox(obj, false)['id'];
     links[links_len] = { id: 0, aox:kid, box:kid, title:dtle, link:dlnk, icon:icon, created_at:current, updated_at:current };
@@ -416,7 +435,7 @@ function update_link() {
         return show_tips("未更新信息", false);
     }
     
-    let current = tool.timestamp;
+    let current = (new Date()).valueOf();
     let aox_id = the_link.aox;
     let box_id = kid;
     let qty_inc = false;
@@ -476,16 +495,9 @@ function show_box(kid) {
         left_inside += `<div class="line-item ${left_item_class} ${rek}" style="background:${lines[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${lines[i]['line']}</blk></bem><nbr>${lines[i]['qty']}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
-    let cont = `<div class="in-aBox line-list" style="display:flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
-    $(".line-btn").css("display", "none");
+    let cont = `<div class="in-aBox line-list flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
+    $(".line-btn").addClass('dye');
     $(".aBox").append(cont);
-    $(".box-go-back").css('display', 'block');
-
-    $(".box-go-back").on("click", function() {
-        $(this).css("display", "none")
-        $(".line-list").remove(); // css("display", "none");
-        $(".line-btn").css("display", "block");
-    });
 
     $(".in-aBox-left .line-item").on("click", function() {
         let kid = $(this).attr('kid');
@@ -656,7 +668,7 @@ function check_dbox() {
     if (line_len > 16) {
         return show_tips('云奁名称 16 个字符内', false);
     }
-    let current = tool.timestamp;
+    let current = (new Date()).valueOf();
     return { id: 0, line: line, bgc: bgc, qty: 0, sort: 0, created_at: current, updated_at: current };
 }
 
@@ -738,7 +750,7 @@ function _update_dbox(kid, dbox, reMsg) {
         }
         return;
     }
-    new_item.updated_at = tool.timestamp;
+    new_item.updated_at = (new Date()).valueOf();
     delete list[kid];
     list[kid] = new_item;
     sor.set('dbox', list);

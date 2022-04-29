@@ -339,6 +339,7 @@
 .in-aBox-right {
     width: 823px;
     padding: 0 12px;
+    padding-right: 0;
 }
 .in-aBox .empty-box {
     width: 600px;
