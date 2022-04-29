@@ -94,6 +94,22 @@
 .bpx-cview .dbox {
     width: 180px;
 }
+.bpx-cview, .bpx-kview {
+    border: 1px solid #000;
+}
+.bxf4e19973e-mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background: #b9f9eb;
+    z-index: 101;
+    opacity: 0.5;
+}
+.bxf4e19973e-mask-t {
+   font-size: 200px !important;
+   user-select: none;
+}
 .bchoose {
     margin-left: 4px;
 }
@@ -260,6 +276,11 @@
     position: relative;
     margin-right: 6px;
     margin-bottom: 6px;
+    min-width: 52px;
+    text-align: center;
+}
+.btn-group .butn {
+    margin: 0 10px;
     min-width: 52px;
     text-align: center;
 }

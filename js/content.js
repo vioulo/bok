@@ -113,7 +113,7 @@ $(document).on('keydown', function (e) {
         }
         if (_back == 1) {
             if ($('.line-list').length) {
-                $('.line-list').addClass('dye');
+                $('.line-list').remove();
                 $('.line-btn').removeClass('dye');
             }
         }
@@ -124,9 +124,27 @@ $(document).on('keydown', function (e) {
 $(document).on("keydown", function(e) {
     let key = e.which || e.keyCode;
     if (key == 27) {
-        $(".bpx").remove();
-        $(".aBox").remove();
+        if ($('.bxf4e19973e-blk').length == 1) {
+            $('.bxf4e19973e-blk').remove();
+            return;
+        }
+        if ($('.bxf4e19973e-mask').length) {
+            $('.bxf4e19973e-mask').remove();
+        } else {
+            $('.bxf4e19973e-blk').each(function (k, v) {
+                let t = k + 1;
+                $(v).addClass('mk-blk' + t);
+                $(v).append(`<div class="flex xy-center bxf4e19973e-mask"><div class="bxf4e19973e-mask-t">${t}</div></div>`);
+            });
+        }
+        return;
     }
+    console.log(key);
+    let k = {
+        '49': 1,
+        '50': 2,
+    };
+    $('.mk-blk' + k[key]).remove();
 });
 
 
@@ -134,7 +152,7 @@ function keydown_w() {
     if ($(".bpx-cview").length == 1) return;
     $(".bpx").remove();
     let obj = {
-        title: '收集链接',
+        tit: '收集链接',
         kid: 0,
         lid: 0,
         box: '缓存区',
@@ -178,7 +196,7 @@ function keydown_r() {
         }
     }
 
-    let box = `<div class="aBox"><div class="in-aBox line-btn"><div class="bxf4e19973e-lines bxf4e19973e-gc-10">${insi}</div></div></div>`;
+    let box = `<div class="bxf4e19973e-blk aBox"><div class="in-aBox line-btn"><div class="bxf4e19973e-lines bxf4e19973e-gc-10">${insi}</div></div></div>`;
     $("body").append(box);
     $(".in-aBox .butn").on("click", function() {
         if ($(this).attr("canin") == "yes") {
@@ -201,7 +219,9 @@ function keydown_r() {
         $(this).parent().attr('canin', 'yes');
         $(this).parent().removeClass("red-border");
     });
-    $(".m-point.pt-edit").on("click", function() {
+    $(".m-point.pt-edit").on("click", function () {
+        $('.bpx-kview').remove();
+        $('.bpx-cview').remove();
         let kid = $(this).parent().attr('kid');
         let list = sor.get('dbox');
         let item = list[kid];
@@ -225,7 +245,7 @@ function remove_dbox_view(id, text) {
     let el_bg_msg = `<div class="flex xy-center bg-msg"><div class="flex-dc xy-center bg-msg-inner" ><div class="title">将 &lt; ${text} &gt; 🚀</div>
     <div class="btn-group"><ibk class="butn toRecycle" bid="${id}">回收</ibk><ibk class="butn toDiscard" bid="${id}">丢弃</ibk><ibk class="butn toCancel" bid="${id}">取消</ibk></div></div></div>`;
     
-    $(".in-aBox").append(el_bg_msg);
+    $('.bxf4e19973e-blk.aBox').append(el_bg_msg);
     $(".toCancel").on("click", function() {
         $(".bg-msg").remove();
     });
@@ -241,14 +261,14 @@ function remove_dbox_view(id, text) {
 
 function dbox_discard(id) {
     let list = sor.get('dbox');
-    delete list[id];
+    list.splice(id, 1);
     sor.set('dbox', list);
     $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
     $(".bg-msg").remove();
     let links = sor.get("links");
     for (let i in links) {
         if (links[i]['box'] == id) {
-            delete links[i];
+            links.splice(i, 1);
         }
     }
     sor.set('links', links);
@@ -258,7 +278,7 @@ function dbox_recycle(id) {
     let box = sor.get('dbox');
     let item = box[id];
     if (item.qty == 0) {
-        delete box[id];
+        box.splice(id, 1);
         sor.set('dbox', box);
         $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
         $(".bg-msg").remove();
@@ -274,7 +294,7 @@ function dbox_recycle(id) {
             rec_len += 1;
         }
     }
-    delete box[id];
+    box.splice(id, 1);
     box[1]['qty'] += rec_len;
     sor.set('dbox', box);
     sor.set('links', links);
@@ -294,7 +314,7 @@ function create_dbox(obj) {
         }
         bg_str += `<div class="bgc-bk flex-dc xy-center" bindex="${i}"><div class="bgc-b ${bg_active}"></div><div class="bgc" style="background:${i};"></div></div>`;
     }
-    let html = `<div class="bpx flex xy-center bpx-kview"><div>
+    let html = `<div class="bxf4e19973e-blk bpx flex xy-center bpx-kview"><div>
             <div class="b-fgp">
                 <ibk>${obj.title}</ibk>
             </div>
@@ -334,8 +354,8 @@ function create_dbox(obj) {
 }
 
 function create_link(obj) {
-    let html = `<div class="bpx flex xy-center bpx-cview">
-    <div><div class="b-fgp"><ibk>${obj['title']}</ibk></div>
+    let html = `<div class="bxf4e19973e-blk bpx flex xy-center bpx-cview">
+    <div><div class="b-fgp"><ibk>${obj['tit']}</ibk></div>
     <div class="b-fgp"><ibk>云奁：</ibk><input type="text" class="input dbox" value="${obj['box']}"><ibk class="butn bchoose" is_show="0">选择</ibk></div>
     <div class="b-fgp"><ibk>标题：</ibk><input type="text" class="input dtle" value="${obj['title']}"></div>
     <div class="b-fgp"><ibk>链接：</ibk><input type="text" class="input dlnk" value="${obj['link']}"></div>
@@ -349,7 +369,7 @@ function create_link(obj) {
     }
 
     $(".new-link").on("click", function() {
-         new_link();
+        new_link();
     });
     $(".update-link").on("click", function() {
         update_link();
@@ -514,7 +534,7 @@ function show_box(kid) {
         let el_bg_msg = `<div class="flex xy-center bg-msg"><div class="flex-dc xy-center bg-msg-inner" ><div class="title">清空回收站？ 🚀</div>
         <div class="btn-group"><ibk class="butn ey-confirm">确认</ibk><ibk class="butn ey-cancel">取消</ibk></div></div></div>`;
 
-        $(".in-aBox.line-list").append(el_bg_msg);
+        $('.bxf4e19973e-blk.aBox').append(el_bg_msg);
 
         $(".ey-confirm").on("click", function () {
             empty_trash();
@@ -525,13 +545,15 @@ function show_box(kid) {
         });
     });
     $('.aBox').on('click', '.emoji-edit', function () {
+        $('.bpx-kview').remove();
+        $('.bpx-cview').remove();
         let text = $(".line-item-act bem blk").text();
         let kid = $(".line-item-act").attr('kid');
         let lid = $(this).parent().attr("lid");
         let link = $(this).siblings("a").attr("href");
         let title = $(this).siblings("a").text();
         let obj = {
-            'title': '编辑链接',
+            'tit': '编辑链接',
             'kid': kid,
             'lid': lid,
             'box': text,
@@ -565,7 +587,7 @@ function empty_trash() {
     let link = sor.get('links');
     for (let l in link) {
         if (link[l]['box'] == 1) {
-            delete link[l];
+            link.splice(l, 1);
         }
     }
     console.log(link);
@@ -617,7 +639,7 @@ function inside_right(kid) {
     console.log(links);
     let insi  = '<div class="empty-box">尚无内容</div>';
     let _ins  = '';
-    let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🥬</point>';
+    let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🍁</point>';
     if (kid == 1) {
         edibk = '<point class="emoji-recover" title="恢复">🌿</point>';
     }
@@ -683,11 +705,10 @@ function _new_dbox(dbox, reMsg) {
     let _data = JSON.stringify(obj);
     let data = JSON.parse(_data);
     // 上面的深拷贝会在底下云奁存在时更新情况用到
-    let keys = Object.keys(data);
-    let lens = keys.length;
+    let len = Object.keys(data).length;
     let kid  = 0;
     let temp = '';
-    if (lens > 0) {
+    if (len > 0) {
         let b_has = false;
         for (let i in data) {
             if (data[i]['line'] == dbox['line']) {
@@ -708,14 +729,12 @@ function _new_dbox(dbox, reMsg) {
             return {'status':true, 'id':kid};
         }
     }
-    let id = parseInt(/\d+/.exec(keys[lens - 1])) + 1;
-    kid = `b${id}`;
-    data[kid] = dbox;
+    data[len] = dbox;
     sor.set('dbox', data);
     if (reMsg) {
         show_tips('添加成功', true);
     }
-    return {'status':true, 'id':kid, 'data':data};
+    return {'status':true, 'id':len, 'data':data};
 }
 
 function update_dbox() {
@@ -751,8 +770,11 @@ function _update_dbox(kid, dbox, reMsg) {
         return;
     }
     new_item.updated_at = (new Date()).valueOf();
-    delete list[kid];
+    console.log('old-list:', list);
+    list.splice(kid, 1);
+    console.log('new_item:', new_item);
     list[kid] = new_item;
+    console.log('new_list:', list);
     sor.set('dbox', list);
     if (reMsg) {
         // reMsg 仅当从列表编辑的时候为 true
