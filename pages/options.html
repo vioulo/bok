@@ -3,10 +3,94 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>links</title>
+    <title>bok setting</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+        body {
+            background: #2e2e2e;
+            color: #ffffff;
+            width: 100vw;
+            height: 100vh;
+        }
+        .flex-c {
+            display: flex;
+            flex-direction: column;
+        }
+        .xy-center {
+            align-items: center;
+            justify-content: center;
+        }
+        .title {
+            border-bottom: 2px solid #51b7ff;
+            font-size: 36px;
+            margin-bottom: 2rem;
+            letter-spacing: 20px;
+            text-indent: 20px;
+        }
+        .main {
+            width: 600px;
+            height: 300px;
+            padding: 1rem;
+        }
+        .list {
+            padding: 1rem;
+            margin: 1rem;
+        }
+        .item {
+            width: 560px;
+            border: 1px solid #000;
+            background: #424242;
+            border-radius: 2px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: inset 0px 0px 2px #ffffff;
+            position: relative;
+        }
+        .item:hover {
+            border: 1px solid #adb8ff;
+            box-shadow: 2px 2px #000000;
+        }
+        .progress-tip {
+            color: #0f6;
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            font-size: 12px;
+        }
+    </style>
 </head>
-<body>
-    <h1>options page</h1>
+<body class="flex-c xy-center">
+    <div class="title">选项设置</div>
+    <div class="flex-c xy-center main">
+        <div class="list">
+            <div class="item from-bookmark">
+                <font>从书签同步链接</font>
+                <font class="progress-tip"></font>
+            </div>
+            <div class="item from-json">
+                <font>从文件导入链接</font>
+                <font class="progress-tip"></font>
+            </div>
+            <div class="item download">
+                <font>导出信息到文件</font>
+                <font class="progress-tip"></font>
+            </div>
+            <div class="item delete">
+                <font>清空数据</font>
+                <font class="progress-tip"></font>
+            </div>
+        </div>
+        <div class="version">v 0.5</div>
+    </div>
 </body>
+<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../js/tool.js"></script>
+<script type="text/javascript" src="../js/option.js"></script>
 </html>

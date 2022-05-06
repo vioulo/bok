@@ -30,12 +30,10 @@
             "matches": ["http://*/*", "https://*/*"],
             "js": [
                 "js/jquery-3.3.1.min.js",
+                "js/tool.js",
                 "js/content.js"
             ],
             "css": ["css/main.css"]
         }
-    ],
-    "chrome_url_overrides" : {
-        "bookmarks": "./pages/bookmarks.html"
-    }
+    ]
 }

@@ -6,11 +6,11 @@ let sor = {
     dbox: {},
     links: {},
     dbox_max: 100,
-    creation: function() {
-        let time = tool.timestamp;
+    creation: function () {
+        let time = (new Date()).valueOf();
         let obj = {
-            'b0': { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
-            'b1': { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
+            'a' : { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
+            'b' : { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
         };
         sor.set('dbox', obj);
     },
@@ -55,7 +55,6 @@ let sor = {
 sor.init();
 
 let tool = {
-    timestamp: (new Date()).valueOf(),
     dateformat: (fmt, date) => {
         let ret;
         const opt = {
@@ -98,12 +97,53 @@ $(document).on('keyup', function(e) {
     }
 });
 
+let _back = 0;
+$(document).on('keydown', function (e) {
+    // left 37 | a 65
+    if (e.keyCode == 37 || e.keyCode == 65) {
+        setTimeout(() => {
+            _back = 0;
+        }, 1000);
+        if (_back < 1) {
+            _back++;
+            return;
+        }
+        if (_back > 1) {
+            _back = 0;
+        }
+        if (_back == 1) {
+            if ($('.line-list').length) {
+                $('.line-list').remove();
+                $('.line-btn').removeClass('dye');
+            }
+        }
+    }
+    // right 39 | d 68
+});
+
 $(document).on("keydown", function(e) {
     let key = e.which || e.keyCode;
     if (key == 27) {
-        $(".bpx").remove();
-        $(".aBox").remove();
+        if ($('.bxf4e19973e-blk').length == 1) {
+            $('.bxf4e19973e-blk').remove();
+            return;
+        }
+        if ($('.bxf4e19973e-mask').length) {
+            $('.bxf4e19973e-mask').remove();
+        } else {
+            $('.bxf4e19973e-blk').each(function (k, v) {
+                let t = k + 1;
+                $(v).addClass('mk-blk' + t);
+                $(v).append(`<div class="flex xy-center bxf4e19973e-mask"><div class="bxf4e19973e-mask-t">${t}</div></div>`);
+            });
+        }
+        return;
     }
+    let k = {
+        '49': 1,
+        '50': 2,
+    };
+    $('.mk-blk' + k[key]).remove();
 });
 
 
@@ -111,7 +151,7 @@ function keydown_w() {
     if ($(".bpx-cview").length == 1) return;
     $(".bpx").remove();
     let obj = {
-        title: '收集链接',
+        tit: '收集链接',
         kid: 0,
         lid: 0,
         box: '缓存区',
@@ -146,14 +186,14 @@ function keydown_r() {
         let points = '';
         for (let i in dbox) {
             points = '<point class="m-point pt-edit"></point><point class="m-point pt-del"></point>';
-            if (['b0', 'b1'].includes(i)) {
+            if (['a', 'b'].includes(i)) {
                 points = '';
             }
             insi += `<label class="butn" canin="yes" kid="${i}" style="background:${dbox[i]['bgc']}">${points}<font>${dbox[i]['line']}</font></label>`;
         }
     }
 
-    let box = `<div class="aBox"><div class="in-aBox line-btn"><div class="line-items">${insi}</div></div><point class="box-go-back"></point><point class="box-exit exit-keyR"></point></div>`;
+    let box = `<div class="bxf4e19973e-blk aBox"><div class="in-aBox line-btn"><div class="bxf4e19973e-lines bxf4e19973e-gc-10">${insi}</div></div></div>`;
     $("body").append(box);
     $(".in-aBox .butn").on("click", function() {
         if ($(this).attr("canin") == "yes") {
@@ -176,7 +216,9 @@ function keydown_r() {
         $(this).parent().attr('canin', 'yes');
         $(this).parent().removeClass("red-border");
     });
-    $(".m-point.pt-edit").on("click", function() {
+    $(".m-point.pt-edit").on("click", function () {
+        $('.bpx-kview').remove();
+        $('.bpx-cview').remove();
         let kid = $(this).parent().attr('kid');
         let list = sor.get('dbox');
         let item = list[kid];
@@ -194,16 +236,13 @@ function keydown_r() {
         let text = $(this).next().text();
         remove_dbox_view(kid, text);
     });
-    $(".exit-keyR").on("click", function() {
-        $(".aBox").remove();
-    });
 }
 
 function remove_dbox_view(id, text) {
     let el_bg_msg = `<div class="flex xy-center bg-msg"><div class="flex-dc xy-center bg-msg-inner" ><div class="title">将 &lt; ${text} &gt; 🚀</div>
     <div class="btn-group"><ibk class="butn toRecycle" bid="${id}">回收</ibk><ibk class="butn toDiscard" bid="${id}">丢弃</ibk><ibk class="butn toCancel" bid="${id}">取消</ibk></div></div></div>`;
     
-    $(".in-aBox").append(el_bg_msg);
+    $('.bxf4e19973e-blk.aBox').append(el_bg_msg);
     $(".toCancel").on("click", function() {
         $(".bg-msg").remove();
     });
@@ -221,12 +260,12 @@ function dbox_discard(id) {
     let list = sor.get('dbox');
     delete list[id];
     sor.set('dbox', list);
-    $(`.line-items .butn[kid=${id}]`).remove();
+    $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
     $(".bg-msg").remove();
     let links = sor.get("links");
     for (let i in links) {
         if (links[i]['box'] == id) {
-            delete links[i];
+            links.splice(i, 1);
         }
     }
     sor.set('links', links);
@@ -238,7 +277,7 @@ function dbox_recycle(id) {
     if (item.qty == 0) {
         delete box[id];
         sor.set('dbox', box);
-        $(`.line-items .butn[kid=${id}]`).remove();
+        $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
         $(".bg-msg").remove();
         return;
     }
@@ -248,15 +287,15 @@ function dbox_recycle(id) {
     for (let i in links) {
         if (links[i]['box'] == id) {
             links[i]['aox'] = links[i]['box'];
-            links[i]['box'] = 'b1';
+            links[i]['box'] = 'b';
             rec_len += 1;
         }
     }
     delete box[id];
-    box['b1']['qty'] += rec_len;
+    box['b']['qty'] += rec_len;
     sor.set('dbox', box);
     sor.set('links', links);
-    $(`.line-items .butn[kid=${id}]`).remove();
+    $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
     $(".bg-msg").remove();
 }
 
@@ -272,7 +311,7 @@ function create_dbox(obj) {
         }
         bg_str += `<div class="bgc-bk flex-dc xy-center" bindex="${i}"><div class="bgc-b ${bg_active}"></div><div class="bgc" style="background:${i};"></div></div>`;
     }
-    let html = `<div class="bpx flex xy-center bpx-kview"><div>
+    let html = `<div class="bxf4e19973e-blk bpx flex xy-center bpx-kview"><div>
             <div class="b-fgp">
                 <ibk>${obj.title}</ibk>
             </div>
@@ -291,7 +330,7 @@ function create_dbox(obj) {
                     <ibk class="butn ${obj.action[0]}">${obj.action[1]}</ibk>
                 </div>
             </div>
-        </div><point class="box-exit exit-dbox"></point></div>`;
+        </div></div>`;
     $("body").append(html);
     $(".bgc-bk").on("click", function() {
         let aim = $(this).find('.bgc-b');
@@ -312,15 +351,14 @@ function create_dbox(obj) {
 }
 
 function create_link(obj) {
-    let html = `<div class="bpx flex xy-center bpx-cview">
-    <div><div class="b-fgp"><ibk>${obj['title']}</ibk></div>
+    let html = `<div class="bxf4e19973e-blk bpx flex xy-center bpx-cview">
+    <div><div class="b-fgp"><ibk>${obj['tit']}</ibk></div>
     <div class="b-fgp"><ibk>云奁：</ibk><input type="text" class="input dbox" value="${obj['box']}"><ibk class="butn bchoose" is_show="0">选择</ibk></div>
     <div class="b-fgp"><ibk>标题：</ibk><input type="text" class="input dtle" value="${obj['title']}"></div>
     <div class="b-fgp"><ibk>链接：</ibk><input type="text" class="input dlnk" value="${obj['link']}"></div>
     <div class="b-fgp dye"><ibk>icon：</ibk><input type="hidden" class="input site_icon" value=""></div>
     <div class="b-fgp x-flex-end"><div class="flex x-flex-end msg_area"><ibk class="butn tips hide-text dye"></ibk>
-    <ibk class="butn ${obj['action'][0]}" kid="${obj['kid']}" lid="${obj['lid']}">${obj['action'][1]}</ibk></div></div></div>
-    <point class="box-exit exit-keyW"></point></div>`;
+    <ibk class="butn ${obj['action'][0]}" kid="${obj['kid']}" lid="${obj['lid']}">${obj['action'][1]}</ibk></div></div></div></div>`;
     $("body").append(html);
 
     if (obj['action'][0] == 'new-link') {
@@ -328,7 +366,7 @@ function create_link(obj) {
     }
 
     $(".new-link").on("click", function() {
-         new_link();
+        new_link();
     });
     $(".update-link").on("click", function() {
         update_link();
@@ -372,7 +410,7 @@ function new_link() {
             return show_tips(`存在于-<${box_title}>`, false);
         }
     }
-    let current = tool.timestamp;
+    let current = (new Date()).valueOf();
     let obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 1, sort: 0, created_at: current, updated_at: current };
     let kid = _new_dbox(obj, false)['id'];
     links[links_len] = { id: 0, aox:kid, box:kid, title:dtle, link:dlnk, icon:icon, created_at:current, updated_at:current };
@@ -414,14 +452,14 @@ function update_link() {
         return show_tips("未更新信息", false);
     }
     
-    let current = tool.timestamp;
+    let current = (new Date()).valueOf();
     let aox_id = the_link.aox;
     let box_id = kid;
     let qty_inc = false;
     let ret_box = {};
     if (dbox != the_box.line) {
         aox_id = kid;
-        box_id = 0;
+        box_id = '';
         for (let i in box) {
             if (box[i]['line'] == dbox) {
                 box_id = i;
@@ -429,7 +467,7 @@ function update_link() {
                 break;
             }
         }
-        if (box_id == 0) {
+        if (box_id == '') {
             let nbox_obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current };
             let ret_db = _new_dbox(nbox_obj, false);
             ret_box = ret_db['data'];
@@ -458,7 +496,6 @@ function show_box(kid) {
     let line_obj = lines[kid];
     let left_inside = '';
     let left_item_class = '';
-    console.log(lines);
     for (let i in lines) {
         let rek = '';
         let sign = '';
@@ -467,23 +504,20 @@ function show_box(kid) {
         } else {
             left_item_class = '';
         }
-        if (i == 'b1') {
+        if (i == 'b' && lines[i]['qty'] > 0) {
             rek = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
         left_inside += `<div class="line-item ${left_item_class} ${rek}" style="background:${lines[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${lines[i]['line']}</blk></bem><nbr>${lines[i]['qty']}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
-    let cont = `<div class="in-aBox line-list" style="display:flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
-    $(".line-btn").css("display", "none");
+    let cont = `<div class="in-aBox line-list flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
+    $(".line-btn").addClass('dye');
     $(".aBox").append(cont);
-    $(".box-go-back").css('display', 'block');
 
-    $(".box-go-back").on("click", function() {
-        $(this).css("display", "none")
-        $(".line-list").remove(); // css("display", "none");
-        $(".line-btn").css("display", "block");
-    });
+    // scroll animate
+    let el_top = $('.line-item-act').position().top - 20;
+    $(".in-aBox-left.ib-scroll").animate({ scrollTop: el_top }, 300);
 
     $(".in-aBox-left .line-item").on("click", function() {
         let kid = $(this).attr('kid');
@@ -500,7 +534,7 @@ function show_box(kid) {
         let el_bg_msg = `<div class="flex xy-center bg-msg"><div class="flex-dc xy-center bg-msg-inner" ><div class="title">清空回收站？ 🚀</div>
         <div class="btn-group"><ibk class="butn ey-confirm">确认</ibk><ibk class="butn ey-cancel">取消</ibk></div></div></div>`;
 
-        $(".in-aBox.line-list").append(el_bg_msg);
+        $('.bxf4e19973e-blk.aBox').append(el_bg_msg);
 
         $(".ey-confirm").on("click", function () {
             empty_trash();
@@ -511,13 +545,15 @@ function show_box(kid) {
         });
     });
     $('.aBox').on('click', '.emoji-edit', function () {
+        $('.bpx-kview').remove();
+        $('.bpx-cview').remove();
         let text = $(".line-item-act bem blk").text();
         let kid = $(".line-item-act").attr('kid');
         let lid = $(this).parent().attr("lid");
         let link = $(this).siblings("a").attr("href");
         let title = $(this).siblings("a").text();
         let obj = {
-            'title': '编辑链接',
+            'tit': '编辑链接',
             'kid': kid,
             'lid': lid,
             'box': text,
@@ -541,20 +577,18 @@ function show_box(kid) {
 function empty_trash() {
     let box = sor.get('dbox');
     for (let i in box) {
-        if (i == 'b1') {
+        if (i == 'b') {
             box[i]['qty'] = 0;
             break;
         }
     }
-    console.log(box);
     sor.set('dbox', box);
     let link = sor.get('links');
     for (let l in link) {
-        if (link[l]['box'] == 'b1') {
-            delete link[l];
+        if (link[l]['box'] == 'b') {
+            link.splice(l, 1);
         }
     }
-    console.log(link);
     sor.set('links', link);
 
     $(".bg-msg").remove();
@@ -568,9 +602,9 @@ function del_link(kid, lid) {
     let box = sor.get("dbox");
 
     links[lid]['aox'] = kid;
-    links[lid]['box'] = 'b1';
+    links[lid]['box'] = 'b';
     box[kid]['qty'] -= 1;
-    box['b1']['qty'] += 1;
+    box['b']['qty'] += 1;
 
     sor.set('links', links);
     sor.set('dbox', box);
@@ -587,10 +621,10 @@ function recover_link(lid) {
         return;
     }
 
-    links[lid]['aox'] = 'b1';
+    links[lid]['aox'] = 'b';
     links[lid]['box'] = kid;
     box[kid]['qty'] += 1;
-    box['b1']['qty'] -= 1;
+    box['b']['qty'] -= 1;
 
     sor.set('links', links);
     sor.set('dbox', box);
@@ -600,17 +634,23 @@ function recover_link(lid) {
 
 function inside_right(kid) {
     let links = sor.get('links');
-    console.log(links);
     let insi  = '<div class="empty-box">尚无内容</div>';
     let _ins  = '';
-    let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🥬</point>';
-    if (kid == 'b1') {
+    let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🍁</point>';
+    if (kid == 'b') {
         edibk = '<point class="emoji-recover" title="恢复">🌿</point>';
     }
     if (Object.keys(links).length > 0) {
+        let icon = '';
+        let word = '';
         for (let i in links) {
             if (links[i]['box'] == kid) {
-                _ins += `<div class="link-item" lid="${i}"><img src="${links[i]['icon']}"><a href="${links[i]['link']}" target='_blank' class="hide-text">${links[i]['title']}</a>${edibk}</div>`;
+                word = links[i]['title'].substring(0, 1);
+                icon = `<div class="img-space">${word}</div>`;
+                if (links[i]['icon'] != '') {
+                    icon = `<img src="${links[i]['icon']}">`;
+                }
+                _ins += `<div class="link-item" lid="${i}">${icon}<a href="${links[i]['link']}" target='_blank' class="hide-text">${links[i]['title']}</a>${edibk}</div>`;
             }
         }
     }
@@ -620,12 +660,12 @@ function inside_right(kid) {
 
 // show box options
 function show_bpx() {
-    let lines = sor.get('dbox');
+    let box = sor.get('dbox');
     let lview = '<div class="bpx list-view ib-scroll">';
-    if (Object.keys(lines).length > 0) {
-        for (let i in lines) {
-            if (i == 'b1') continue;
-            lview += `<div class="bitem"><ibk class="hide-text">${lines[i]['line']}</ibk></div>`;
+    if (Object.keys(box).length > 0) {
+        for (let i in box) {
+            if (i == 'b') continue;
+            lview += `<div class="bitem"><ibk class="hide-text">${box[i]['line']}</ibk></div>`;
         }
     }
     $("body").append(lview + '</div>');
@@ -647,7 +687,7 @@ function check_dbox() {
     if (line_len > 16) {
         return show_tips('云奁名称 16 个字符内', false);
     }
-    let current = tool.timestamp;
+    let current = (new Date()).valueOf();
     return { id: 0, line: line, bgc: bgc, qty: 0, sort: 0, created_at: current, updated_at: current };
 }
 
@@ -662,11 +702,11 @@ function _new_dbox(dbox, reMsg) {
     let _data = JSON.stringify(obj);
     let data = JSON.parse(_data);
     // 上面的深拷贝会在底下云奁存在时更新情况用到
-    let keys = Object.keys(data);
-    let lens = keys.length;
-    let kid  = 'b0';
+    let len = Object.keys(data).length;
+    let kid  = 'a';
     let temp = '';
-    if (lens > 0) {
+    let last = 'a';
+    if (len > 0) {
         let b_has = false;
         for (let i in data) {
             if (data[i]['line'] == dbox['line']) {
@@ -675,6 +715,7 @@ function _new_dbox(dbox, reMsg) {
                 temp = data[i];
                 break;
             }
+            last = i;
         }
         if (b_has) {
             if (reMsg) {
@@ -687,14 +728,13 @@ function _new_dbox(dbox, reMsg) {
             return {'status':true, 'id':kid};
         }
     }
-    let id = parseInt(/\d+/.exec(keys[lens - 1])) + 1;
-    kid = `b${id}`;
-    data[kid] = dbox;
+    last = bxf4e19973e_gen_key(last);
+    data[last] = dbox;
     sor.set('dbox', data);
     if (reMsg) {
         show_tips('添加成功', true);
     }
-    return {'status':true, 'id':kid, 'data':data};
+    return {'status':true, 'id':last, 'data':data};
 }
 
 function update_dbox() {
@@ -729,7 +769,7 @@ function _update_dbox(kid, dbox, reMsg) {
         }
         return;
     }
-    new_item.updated_at = tool.timestamp;
+    new_item.updated_at = (new Date()).valueOf();
     delete list[kid];
     list[kid] = new_item;
     sor.set('dbox', list);
@@ -777,7 +817,6 @@ function get_site_icon() {
         url = url ? url : '/favicon.ico';
         url = window.location.origin + url;
     }
-    console.log(url);
     let canvas = document.createElement("canvas");
     let ctx = canvas.getContext("2d");
     let img = new Image;
@@ -788,25 +827,10 @@ function get_site_icon() {
         canvas.width = 32;
         ctx.drawImage(img, 0, 0, 32, 32);
         let dataURL = canvas.toDataURL("image/png");
-        console.log(dataURL);
+        // console.log(dataURL);
         // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA
         $(".site_icon").val(dataURL);
         // callback.call(this, dataURL); // 回调函数获取Base64编码
         canvas = null;
     };
 }
-
-// send msg test
-function call_popup() {
-    let that = this;
-    chrome.runtime.sendMessage({
-    info: "我是 content.js"
-    }, res => {
-        
-        console.log(res);
-        setCc(res);
-    })
-}
-chrome.runtime.sendMessage({greeting: '你好，我是content-script呀，我主动发消息给后台！'}, function(response) {
-    console.log('收到来自后台的回复：' + response);
-});
