@@ -6,12 +6,12 @@ let sor = {
     dbox: {},
     links: {},
     dbox_max: 100,
-    creation: function() {
+    creation: function () {
         let time = (new Date()).valueOf();
-        let obj = [
-            { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
-            { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
-        ];
+        let obj = {
+            'a' : { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
+            'b' : { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
+        };
         sor.set('dbox', obj);
     },
     init: function() {
@@ -139,7 +139,6 @@ $(document).on("keydown", function(e) {
         }
         return;
     }
-    console.log(key);
     let k = {
         '49': 1,
         '50': 2,
@@ -185,11 +184,9 @@ function keydown_r() {
     if (Object.keys(dbox).length > 0) {
         insi = '';
         let points = '';
-        console.log(dbox);
         for (let i in dbox) {
-            console.log(i);
             points = '<point class="m-point pt-edit"></point><point class="m-point pt-del"></point>';
-            if (i < 2) {
+            if (['a', 'b'].includes(i)) {
                 points = '';
             }
             insi += `<label class="butn" canin="yes" kid="${i}" style="background:${dbox[i]['bgc']}">${points}<font>${dbox[i]['line']}</font></label>`;
@@ -261,7 +258,7 @@ function remove_dbox_view(id, text) {
 
 function dbox_discard(id) {
     let list = sor.get('dbox');
-    list.splice(id, 1);
+    delete list[id];
     sor.set('dbox', list);
     $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
     $(".bg-msg").remove();
@@ -278,7 +275,7 @@ function dbox_recycle(id) {
     let box = sor.get('dbox');
     let item = box[id];
     if (item.qty == 0) {
-        box.splice(id, 1);
+        delete box[id];
         sor.set('dbox', box);
         $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
         $(".bg-msg").remove();
@@ -290,12 +287,12 @@ function dbox_recycle(id) {
     for (let i in links) {
         if (links[i]['box'] == id) {
             links[i]['aox'] = links[i]['box'];
-            links[i]['box'] = 1;
+            links[i]['box'] = 'b';
             rec_len += 1;
         }
     }
-    box.splice(id, 1);
-    box[1]['qty'] += rec_len;
+    delete box[id];
+    box['b']['qty'] += rec_len;
     sor.set('dbox', box);
     sor.set('links', links);
     $(`.bxf4e19973e-lines .butn[kid=${id}]`).remove();
@@ -462,7 +459,7 @@ function update_link() {
     let ret_box = {};
     if (dbox != the_box.line) {
         aox_id = kid;
-        box_id = 0;
+        box_id = '';
         for (let i in box) {
             if (box[i]['line'] == dbox) {
                 box_id = i;
@@ -470,7 +467,7 @@ function update_link() {
                 break;
             }
         }
-        if (box_id == 0) {
+        if (box_id == '') {
             let nbox_obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current };
             let ret_db = _new_dbox(nbox_obj, false);
             ret_box = ret_db['data'];
@@ -499,7 +496,6 @@ function show_box(kid) {
     let line_obj = lines[kid];
     let left_inside = '';
     let left_item_class = '';
-    console.log(lines);
     for (let i in lines) {
         let rek = '';
         let sign = '';
@@ -508,7 +504,7 @@ function show_box(kid) {
         } else {
             left_item_class = '';
         }
-        if (i == 1 && lines[i]['qty'] > 0) {
+        if (i == 'b' && lines[i]['qty'] > 0) {
             rek = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
@@ -518,6 +514,10 @@ function show_box(kid) {
     let cont = `<div class="in-aBox line-list flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
     $(".line-btn").addClass('dye');
     $(".aBox").append(cont);
+
+    // scroll animate
+    let el_top = $('.line-item-act').position().top - 20;
+    $(".in-aBox-left.ib-scroll").animate({ scrollTop: el_top }, 300);
 
     $(".in-aBox-left .line-item").on("click", function() {
         let kid = $(this).attr('kid');
@@ -577,20 +577,18 @@ function show_box(kid) {
 function empty_trash() {
     let box = sor.get('dbox');
     for (let i in box) {
-        if (i == 1) {
+        if (i == 'b') {
             box[i]['qty'] = 0;
             break;
         }
     }
-    console.log(box);
     sor.set('dbox', box);
     let link = sor.get('links');
     for (let l in link) {
-        if (link[l]['box'] == 1) {
+        if (link[l]['box'] == 'b') {
             link.splice(l, 1);
         }
     }
-    console.log(link);
     sor.set('links', link);
 
     $(".bg-msg").remove();
@@ -604,9 +602,9 @@ function del_link(kid, lid) {
     let box = sor.get("dbox");
 
     links[lid]['aox'] = kid;
-    links[lid]['box'] = 1;
+    links[lid]['box'] = 'b';
     box[kid]['qty'] -= 1;
-    box[1]['qty'] += 1;
+    box['b']['qty'] += 1;
 
     sor.set('links', links);
     sor.set('dbox', box);
@@ -623,10 +621,10 @@ function recover_link(lid) {
         return;
     }
 
-    links[lid]['aox'] = 1;
+    links[lid]['aox'] = 'b';
     links[lid]['box'] = kid;
     box[kid]['qty'] += 1;
-    box[1]['qty'] -= 1;
+    box['b']['qty'] -= 1;
 
     sor.set('links', links);
     sor.set('dbox', box);
@@ -636,11 +634,10 @@ function recover_link(lid) {
 
 function inside_right(kid) {
     let links = sor.get('links');
-    console.log(links);
     let insi  = '<div class="empty-box">尚无内容</div>';
     let _ins  = '';
     let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🍁</point>';
-    if (kid == 1) {
+    if (kid == 'b') {
         edibk = '<point class="emoji-recover" title="恢复">🌿</point>';
     }
     if (Object.keys(links).length > 0) {
@@ -663,12 +660,12 @@ function inside_right(kid) {
 
 // show box options
 function show_bpx() {
-    let lines = sor.get('dbox');
+    let box = sor.get('dbox');
     let lview = '<div class="bpx list-view ib-scroll">';
-    if (Object.keys(lines).length > 0) {
-        for (let i in lines) {
-            if (i == 1) continue;
-            lview += `<div class="bitem"><ibk class="hide-text">${lines[i]['line']}</ibk></div>`;
+    if (Object.keys(box).length > 0) {
+        for (let i in box) {
+            if (i == 'b') continue;
+            lview += `<div class="bitem"><ibk class="hide-text">${box[i]['line']}</ibk></div>`;
         }
     }
     $("body").append(lview + '</div>');
@@ -706,8 +703,9 @@ function _new_dbox(dbox, reMsg) {
     let data = JSON.parse(_data);
     // 上面的深拷贝会在底下云奁存在时更新情况用到
     let len = Object.keys(data).length;
-    let kid  = 0;
+    let kid  = 'a';
     let temp = '';
+    let last = 'a';
     if (len > 0) {
         let b_has = false;
         for (let i in data) {
@@ -717,6 +715,7 @@ function _new_dbox(dbox, reMsg) {
                 temp = data[i];
                 break;
             }
+            last = i;
         }
         if (b_has) {
             if (reMsg) {
@@ -729,12 +728,13 @@ function _new_dbox(dbox, reMsg) {
             return {'status':true, 'id':kid};
         }
     }
-    data[len] = dbox;
+    last = bxf4e19973e_gen_key(last);
+    data[last] = dbox;
     sor.set('dbox', data);
     if (reMsg) {
         show_tips('添加成功', true);
     }
-    return {'status':true, 'id':len, 'data':data};
+    return {'status':true, 'id':last, 'data':data};
 }
 
 function update_dbox() {
@@ -770,11 +770,8 @@ function _update_dbox(kid, dbox, reMsg) {
         return;
     }
     new_item.updated_at = (new Date()).valueOf();
-    console.log('old-list:', list);
-    list.splice(kid, 1);
-    console.log('new_item:', new_item);
+    delete list[kid];
     list[kid] = new_item;
-    console.log('new_list:', list);
     sor.set('dbox', list);
     if (reMsg) {
         // reMsg 仅当从列表编辑的时候为 true
@@ -820,7 +817,6 @@ function get_site_icon() {
         url = url ? url : '/favicon.ico';
         url = window.location.origin + url;
     }
-    console.log(url);
     let canvas = document.createElement("canvas");
     let ctx = canvas.getContext("2d");
     let img = new Image;
@@ -831,7 +827,7 @@ function get_site_icon() {
         canvas.width = 32;
         ctx.drawImage(img, 0, 0, 32, 32);
         let dataURL = canvas.toDataURL("image/png");
-        console.log(dataURL);
+        // console.log(dataURL);
         // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA
         $(".site_icon").val(dataURL);
         // callback.call(this, dataURL); // 回调函数获取Base64编码

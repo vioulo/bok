@@ -1,4 +1,4 @@
-function genKey(key) {
+function bxf4e19973e_gen_key(key) {
     if (!key) {
         return 'a';
     }

@@ -1,7 +1,7 @@
 $('.from-bookmark').on('click', function () {
-    console.log('--c--');
+    console.log('--A--');
     chrome.bookmarks.getTree(function (tree) {
-        console.log('--i--');
+        console.log('--B--');
         let children = tree[0]['children'];
         let box = [];
         let link = [];
@@ -37,17 +37,16 @@ $('.from-bookmark').on('click', function () {
             return;
         }
         chrome.storage.local.get('dbox', function (res) {
-            let obj = [];
-            let len = 2;
+            let obj = {};
+            let last = '';
             if (Object.keys(res).length > 0) {
                 obj = res['dbox'];
-                len = Object.keys(obj).length;
             } else {
                 let current = (new Date()).valueOf();
-                obj = [
-                    { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current },
-                    { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current },
-                ];
+                obj = {
+                    'a': { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current },
+                    'b': { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current },
+                };
             }
             for (let o in obj) {
                 for (let b in box) {
@@ -56,13 +55,14 @@ $('.from-bookmark').on('click', function () {
                         box.splice(b, 1);
                     }
                 }
+                last = o;
             }
             if (!box.length) {
                 return;
             }
             for (let b of box) {
-                obj[len] = { id: 0, line: b.title, bgc: '#ffffff', qty: b.qty, sort: 0, created_at: b.create_at, updated_at: b.create_at }
-                len++;
+                last = bxf4e19973e_gen_key(last);
+                obj[last] = { id: 0, line: b.title, bgc: '#ffffff', qty: b.qty, sort: 0, created_at: b.create_at, updated_at: b.create_at }
             }
             let data = {};
             data['dbox'] = obj;
@@ -73,10 +73,8 @@ $('.from-bookmark').on('click', function () {
 
         chrome.storage.local.get('links', function (res) {
             let obj = [];
-            let len = 0;
             if (Object.keys(res).length > 0) {
                 obj = res['links'];
-                len = Object.keys(obj).length;
                 for (let b in obj) {
                     for (let l in link) {
                         if (link[l].url == obj[b].link) {
@@ -91,42 +89,49 @@ $('.from-bookmark').on('click', function () {
             chrome.storage.local.get('dbox', function (res) {
                 let obj = [];
                 let data = res['dbox'];
+                let tmp = {};
                 for (let l of link) {
-                    let kid = 0;
+                    let kid = 'a';
                     for (let d in data) {
                         if (data[d].line == l.box) {
                             kid = d;
                         }
                     }
-                    obj[len] = { id: 0, aox: kid, box: kid, title: l.title, link: l.url, icon: '', created_at: l.create_at, updated_at: l.create_at };
-                    len++;
+                    tmp = { id: 0, aox: kid, box: kid, title: l.title, link: l.url, icon: '', created_at: l.create_at, updated_at: l.create_at };
+                    obj.push(tmp);
                 }
                 let list = {};
                 list['links'] = obj;
-                console.log(list);
                 chrome.storage.local.set(list, function() {
                     console.log('---> link <---');
                 });
             });
         });
-        $('.from-bookmark .progress-tip').text('已完成');
+        show_tips($('.from-bookmark .progress-tip'), '已完成');
     });
 });
 
 $('.from-json').click(function () {
-    $(this).find('.progress-tip').text('还在写');
+    show_tips($(this).find('.progress-tip'), '还在写');
 });
 
 $('.download').click(function () {
-    $(this).find('.progress-tip').text('还在写');
+    show_tips($(this).find('.progress-tip'), '还在写');
 });
 
 $('.delete').click(function () {
-    chrome.storage.local.remove('dbox', function(res) {
+    chrome.storage.local.remove('dbox', function (res) {
         console.log('dbox removed');
     });
-    chrome.storage.local.remove('links', function(res) {
+    chrome.storage.local.remove('links', function (res) {
         console.log('links removed');
     });
-    $(this).find('.progress-tip').text('已清空');
+    show_tips($(this).find('.progress-tip'), '已清空');
 });
+
+function show_tips(aim, msg) {
+    aim.text(msg);
+    setTimeout(() => {
+        aim.text('');
+    }, 1500);
+}
