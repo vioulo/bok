@@ -116,7 +116,21 @@ $('.from-json').click(function () {
 });
 
 $('.download').click(function () {
-    show_tips($(this).find('.progress-tip'), '还在写');
+    chrome.storage.local.get('dbox', function (res) {
+        const box = res['dbox'];
+        chrome.storage.local.get('links', function (res) {
+            const link = res['links'];
+            const data = {box, link};
+            const str = JSON.stringify(data);
+            let elt_hid = document.createElement('a');
+            elt_hid.href = window.URL.createObjectURL(new Blob([str], { type: 'application/json' }));
+            elt_hid.target = '_blank';
+            elt_hid.download = 'box.json';
+            elt_hid.click();
+            console.log(elt_hid);
+        });
+    });
+    show_tips($(this).find('.progress-tip'), '下载成功');
 });
 
 $('.delete').click(function () {
