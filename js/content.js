@@ -9,8 +9,8 @@ let sor = {
     creation: function () {
         let time = (new Date()).valueOf();
         let obj = {
-            'a' : { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
-            'b' : { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
+            'a' : { id: 0, name: '缓存区', bgc: '#ffffff', qty: 0, created_at: time, updated_at: time },
+            'b' : { id: 0, name: '回收站', bgc: '#ffffff', qty: 0, created_at: time, updated_at: time },
         };
         sor.set('dbox', obj);
     },
@@ -180,6 +180,7 @@ function keydown_e() {
 function keydown_r() {
     if ($(".aBox").length == 1) return;
     let dbox = sor.get('dbox');
+    console.log(dbox);
     let insi = '<div class="empty-box">尚无内容</div>';
     if (Object.keys(dbox).length > 0) {
         insi = '';
@@ -189,7 +190,7 @@ function keydown_r() {
             if (['a', 'b'].includes(i)) {
                 points = '';
             }
-            insi += `<label class="butn" canin="yes" kid="${i}" style="background:${dbox[i]['bgc']}">${points}<font>${dbox[i]['line']}</font></label>`;
+            insi += `<label class="butn" canin="yes" kid="${i}" style="background:${dbox[i]['bgc']}">${points}<font>${dbox[i]['name']}</font></label>`;
         }
     }
 
@@ -225,8 +226,8 @@ function keydown_r() {
         let obj = {
             'title': '编辑云奁',
             'kid': kid,
-            'name': item['line'],
-            'bgc': item['bgc'],
+            'name': item.name,
+            'bgc': item.bgc,
             'action': ['update_dbox', '更新']
         };
         create_dbox(obj);
@@ -317,7 +318,7 @@ function create_dbox(obj) {
             </div>
             <div class="b-fgp cloud-bpx">
                 <ibk class="line-sign" kid="${obj.kid}">云奁：</ibk>
-                <input type="text" class="input line" name="line" value="${obj.name}">
+                <input type="text" class="input line" value="${obj.name}">
                 <!--<ibk class="cloud-bpx-tips">有时候</ibk>-->
             </div>
             <div class="b-fgp">
@@ -405,13 +406,13 @@ function new_link() {
         }
         if (link_box !== '') {
             let box = sor.get("dbox");
-            let box_title = box[link_box]['line'];
+            let box_title = box[link_box]['name'];
             
             return show_tips(`存在于-<${box_title}>`, false);
         }
     }
     let current = (new Date()).valueOf();
-    let obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 1, sort: 0, created_at: current, updated_at: current };
+    let obj = { id: 0, name: dbox, bgc: '#ffffff', qty: 1, created_at: current, updated_at: current };
     let kid = _new_dbox(obj, false)['id'];
     links[links_len] = { id: 0, aox:kid, box:kid, title:dtle, link:dlnk, icon:icon, created_at:current, updated_at:current };
     sor.set('links', links);
@@ -439,7 +440,7 @@ function update_link() {
     
     let the_link = links[lid];
     let the_box = box[kid];
-    let link_tmp = {box:the_box.line, link:the_link.link, title:the_link.title};
+    let link_tmp = { box: the_box.name, link: the_link.link, title: the_link.title };
     let update_link = false;
     for (let i in link_tmp) {
         if (link_tmp[i] != link[i]) {
@@ -457,18 +458,18 @@ function update_link() {
     let box_id = kid;
     let qty_inc = false;
     let ret_box = {};
-    if (dbox != the_box.line) {
+    if (dbox != the_box.name) {
         aox_id = kid;
         box_id = '';
         for (let i in box) {
-            if (box[i]['line'] == dbox) {
+            if (box[i]['name'] == dbox) {
                 box_id = i;
                 qty_inc = true;
                 break;
             }
         }
         if (box_id == '') {
-            let nbox_obj = { id: 0, line: dbox, bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current };
+            let nbox_obj = { id: 0, name: dbox, bgc: '#ffffff', qty: 0, created_at: current, updated_at: current };
             let ret_db = _new_dbox(nbox_obj, false);
             ret_box = ret_db['data'];
             box_id = ret_db['id'];
@@ -492,23 +493,23 @@ function update_link() {
 }
 
 function show_box(kid) {
-    let lines = sor.get('dbox');
-    let line_obj = lines[kid];
+    let boxs = sor.get('dbox');
+    let box_obj = boxs[kid];
     let left_inside = '';
     let left_item_class = '';
-    for (let i in lines) {
+    for (let i in boxs) {
         let rek = '';
         let sign = '';
-        if (lines[i]['line'] == line_obj['line']) {
+        if (boxs[i]['name'] == box_obj['name']) {
             left_item_class = 'line-item-act';
         } else {
             left_item_class = '';
         }
-        if (i == 'b' && lines[i]['qty'] > 0) {
+        if (i == 'b' && boxs[i]['qty'] > 0) {
             rek = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
-        left_inside += `<div class="line-item ${left_item_class} ${rek}" style="background:${lines[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${lines[i]['line']}</blk></bem><nbr>${lines[i]['qty']}</nbr></div>`;
+        left_inside += `<div class="line-item ${left_item_class} ${rek}" style="background:${boxs[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${boxs[i]['name']}</blk></bem><nbr>${boxs[i]['qty']}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
     let cont = `<div class="in-aBox line-list flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
@@ -629,7 +630,7 @@ function recover_link(lid) {
     sor.set('links', links);
     sor.set('dbox', box);
     $(`.link-item[lid=${lid}]`).remove();
-    console.log(`已经恢复到 - ${box[kid]['line']}`);
+    console.log(`已经恢复到 - ${box[kid]['name']}`);
 }
 
 function inside_right(kid) {
@@ -665,7 +666,7 @@ function show_bpx() {
     if (Object.keys(box).length > 0) {
         for (let i in box) {
             if (i == 'b') continue;
-            lview += `<div class="bitem"><ibk class="hide-text">${box[i]['line']}</ibk></div>`;
+            lview += `<div class="bitem"><ibk class="hide-text">${box[i]['name']}</ibk></div>`;
         }
     }
     $("body").append(lview + '</div>');
@@ -678,17 +679,17 @@ function show_bpx() {
 }
 
 function check_dbox() {
-    let line = $(".b-fgp .line").val().trim();
+    let bname = $(".b-fgp .line").val().trim();
     let bgc = $(".bb-act").parent().attr('bindex');
-    let line_len = line.length;
-    if (line_len == 0) {
+    let bn_len = bname.length;
+    if (bn_len == 0) {
         return show_tips('云奁名称不能为空', false);
     }
-    if (line_len > 16) {
+    if (bn_len > 16) {
         return show_tips('云奁名称 16 个字符内', false);
     }
     let current = (new Date()).valueOf();
-    return { id: 0, line: line, bgc: bgc, qty: 0, sort: 0, created_at: current, updated_at: current };
+    return { id: 0, name: bname, bgc: bgc, qty: 0, created_at: current, updated_at: current };
 }
 
 function new_dbox() {
@@ -709,7 +710,7 @@ function _new_dbox(dbox, reMsg) {
     if (len > 0) {
         let b_has = false;
         for (let i in data) {
-            if (data[i]['line'] == dbox['line']) {
+            if (data[i].name == dbox.name) {
                 b_has = true;
                 kid = i;
                 temp = data[i];
@@ -748,12 +749,12 @@ function _update_dbox(kid, dbox, reMsg) {
     let item = list[kid];
     if (!item) {
         if (reMsg) {
-            return show_tips('当前云奁已经消失了！', true);
+            return show_tips('当前云奁已经消失不见！', true);
         }
         return;
     }
     let update = false;
-    let tmp = { line: dbox.line, bgc: dbox.bgc, qty: dbox.qty };
+    let tmp = { name: dbox.name, bgc: dbox.bgc, qty: dbox.qty };
     let new_item = {};
     for (let i in item) {
         let val = item[i];
@@ -775,11 +776,11 @@ function _update_dbox(kid, dbox, reMsg) {
     sor.set('dbox', list);
     if (reMsg) {
         // reMsg 仅当从列表编辑的时候为 true
-        if (new_item.line != item.line) {
+        if (new_item.name != item.name) {
             // 如果名称被更新了，则更新打开的列表中的名称
             $(".butn font").each(function() {
-                if ($(this).text() == item.line) {
-                    $(this).text(new_item.line);
+                if ($(this).text() == item.name) {
+                    $(this).text(new_item.name);
                 }
             });
         }

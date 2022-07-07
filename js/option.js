@@ -44,13 +44,13 @@ $('.from-bookmark').on('click', function () {
             } else {
                 let current = (new Date()).valueOf();
                 obj = {
-                    'a': { id: 0, line: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current },
-                    'b': { id: 0, line: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current },
+                    'a': { id: 0, name: '缓存区', bgc: '#ffffff', qty: 0, created_at: current, updated_at: current },
+                    'b': { id: 0, name: '回收站', bgc: '#ffffff', qty: 0, created_at: current, updated_at: current },
                 };
             }
             for (let o in obj) {
                 for (let b in box) {
-                    if (box[b].title == obj[o].line) {
+                    if (box[b].title == obj[o].name) {
                         obj[o].qty += box[b].qty;
                         box.splice(b, 1);
                     }
@@ -62,7 +62,7 @@ $('.from-bookmark').on('click', function () {
             }
             for (let b of box) {
                 last = bxf4e19973e_gen_key(last);
-                obj[last] = { id: 0, line: b.title, bgc: '#ffffff', qty: b.qty, sort: 0, created_at: b.create_at, updated_at: b.create_at }
+                obj[last] = { id: 0, name: b.title, bgc: '#ffffff', qty: b.qty, created_at: b.create_at, updated_at: b.create_at }
             }
             let data = {};
             data['dbox'] = obj;
@@ -93,7 +93,7 @@ $('.from-bookmark').on('click', function () {
                 for (let l of link) {
                     let kid = 'a';
                     for (let d in data) {
-                        if (data[d].line == l.box) {
+                        if (data[d].name == l.box) {
                             kid = d;
                         }
                     }
