@@ -180,17 +180,17 @@ function keydown_e() {
 function keydown_r() {
     if ($(".aBox").length == 1) return;
     let dbox = sor.get('dbox');
-    console.log(dbox);
     let insi = '<div class="empty-box">尚无内容</div>';
-    if (Object.keys(dbox).length > 0) {
+    let bkey = Object.keys(dbox);
+    if (bkey.length) {
         insi = '';
         let points = '';
-        for (let i in dbox) {
+        for (let b of bkey) {
             points = '<point class="m-point pt-edit"></point><point class="m-point pt-del"></point>';
-            if (['a', 'b'].includes(i)) {
+            if (['a', 'b'].includes(b)) {
                 points = '';
             }
-            insi += `<label class="butn" canin="yes" kid="${i}" style="background:${dbox[i]['bgc']}">${points}<font>${dbox[i]['name']}</font></label>`;
+            insi += `<label class="butn" canin="yes" kid="${b}" style="background:${dbox[b].bgc}">${points}<font>${dbox[b].name}</font></label>`;
         }
     }
 
@@ -497,19 +497,20 @@ function show_box(kid) {
     let box_obj = boxs[kid];
     let left_inside = '';
     let left_item_class = '';
-    for (let i in boxs) {
+    let bkey = Object.keys(boxs);
+    for (let b of bkey) {
         let rek = '';
         let sign = '';
-        if (boxs[i]['name'] == box_obj['name']) {
+        if (boxs[b]['name'] == box_obj['name']) {
             left_item_class = 'line-item-act';
         } else {
             left_item_class = '';
         }
-        if (i == 'b' && boxs[i]['qty'] > 0) {
+        if (b == 'b' && boxs[b]['qty'] > 0) {
             rek = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
-        left_inside += `<div class="line-item ${left_item_class} ${rek}" style="background:${boxs[i]['bgc']};" kid="${i}"><bem>${sign}<blk>${boxs[i]['name']}</blk></bem><nbr>${boxs[i]['qty']}</nbr></div>`;
+        left_inside += `<div class="line-item ${left_item_class} ${rek}" style="background:${boxs[b].bgc};" kid="${b}"><bem>${sign}<blk>${boxs[b].name}</blk></bem><nbr>${boxs[b].qty}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
     let cont = `<div class="in-aBox line-list flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
@@ -663,10 +664,11 @@ function inside_right(kid) {
 function show_bpx() {
     let box = sor.get('dbox');
     let lview = '<div class="bpx list-view ib-scroll">';
-    if (Object.keys(box).length > 0) {
-        for (let i in box) {
-            if (i == 'b') continue;
-            lview += `<div class="bitem"><ibk class="hide-text">${box[i]['name']}</ibk></div>`;
+    let bkey = Object.keys(box);
+    if (bkey.length) {
+        for (let b of bkey) {
+            if (b == 'b') continue;
+            lview += `<div class="bitem"><ibk class="hide-text">${box[b].name}</ibk></div>`;
         }
     }
     $("body").append(lview + '</div>');
