@@ -120,6 +120,10 @@ $('.download').click(function () {
         const box = res['dbox'];
         chrome.storage.local.get('links', function (res) {
             const link = res['links'];
+            if (!link || !Object.key(link).length) {
+                show_tips($('.download').find('.progress-tip'), '没有数据可供下载');
+                return;
+            }
             const data = {box, link};
             const str = JSON.stringify(data);
             let elt_hid = document.createElement('a');
@@ -128,9 +132,9 @@ $('.download').click(function () {
             elt_hid.download = 'box.json';
             elt_hid.click();
             console.log(elt_hid);
+            show_tips($('.download').find('.progress-tip'), '下载成功');
         });
     });
-    show_tips($(this).find('.progress-tip'), '下载成功');
 });
 
 $('.delete').click(function () {
