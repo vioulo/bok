@@ -2,30 +2,31 @@ function bxf4e19973e_gen_key(key) {
     if (!key) {
         return 'a';
     }
-    if (key == 'z') {
-        key = 'zz';
+    let w_obj = {};
+    let w_arr = [];
+    for (let n = 97; n < 123; n++) {
+        let char = String.fromCharCode(n);
+        w_obj[char] = n - 97;
+        w_arr.push(char);
     }
-    let word = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
     let arr = key.split('').reverse();
-    let nrr = [];
-    let tag = 0;
-    for (let a in arr) {
-        if (tag > 0) {
-            nrr.push(arr[a]);
-            continue;
+    let c_arr = arr;
+    carry26(arr);
+
+    function carry26(arr, k = 0) {
+        if (k > arr.length) return;
+        let a = arr[k];
+        if (!a) {
+            c_arr.push('a');
+            return;
         }
-        for (let i in word) {
-            if (arr[a] == word[i]) {
-                let next = Number(i) + 1;
-                console.log(next, word[next]);
-                if (next > 25) {
-                    nrr.push('a');
-                } else {
-                    nrr.push(word[next]);
-                    tag = next;
-                }
-            }
+        let next = w_obj[a] + 1;
+        if (next > 25) {
+            c_arr[k] = 'a';
+            carry26(arr, k + 1);
+            return;
         }
+        c_arr[k] = w_arr[next];
     }
-    return nrr.reverse().join('');
+    return c_arr.reverse().join('');
 }
