@@ -2,10 +2,9 @@ window.bok_links = [];
 window.bok_boxs = {};
 window.buffer_qty = 0;
 $('.from-bookmark').on('click', function () {
-    console.log('--A--');
+    console.log('---> start <---');
     chrome.bookmarks.getTree(function (tree) {
         dump_tree_nodes(tree[0]['children']);
-        console.log(window.bok_links, window.bok_boxs);
         let link = window.bok_links;
         let box = window.bok_boxs;
         if (!link.length) {
@@ -103,7 +102,6 @@ function dump_tree_nodes(bookmark) {
     for (let b of bookmark) {
         // b -> bookmark bar / other bookmarks
         // c -> folders
-        console.log(b);
         for (let c of b.children) {
             // 链接不在文件夹里面
             if (!c.children && c.url) {
@@ -149,7 +147,6 @@ $('.download').click(function () {
             elt_hid.target = '_blank';
             elt_hid.download = 'box.json';
             elt_hid.click();
-            console.log(elt_hid);
             show_tips($('.download').find('.progress-tip'), '下载成功');
         });
     });
