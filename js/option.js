@@ -1,41 +1,29 @@
+window.bok_links = [];
+window.bok_boxs = {};
+window.buffer_qty = 0;
 $('.from-bookmark').on('click', function () {
     console.log('--A--');
     chrome.bookmarks.getTree(function (tree) {
-        console.log('--B--');
-        let children = tree[0]['children'];
-        let box = [];
-        let link = [];
-        let tmp_qty = 0;
-        for (let c of children) {
-            let ch = c.children;
-            if (ch.length) {
-                for (let ac of ch) {
-                    if (ac.children) {
-                        let qty = 0;
-                        for (let ic of ac.children) {
-                            link.push({ box: ac.title, title: ic.title, url: ic.url, create_at: ic.dateAdded });
-                            qty ++;
-                        }
-                        box.push({ title: ac.title, create_at: ac.dateAdded, qty: qty });
-    
-                    } else {
-                        tmp_qty ++;
-                        link.push({ box: '缓存区', title: ac.title, url: ac.url, create_at: ac.dateAdded });
-                    }
-                }
-            }
-        }
-        if (tmp_qty > 0) {
-            for (let b of box) {
-                if (b.title == '缓存区') {
-                    b.qty += tmp_qty;
-                }
-            }
-        }
+        dump_tree_nodes(tree[0]['children']);
+        console.log(window.bok_links, window.bok_boxs);
+        let link = window.bok_links;
+        let box = window.bok_boxs;
         if (!link.length) {
-            $('.from-bookmark .progress-tip').text('书签栏中没有链接');
+            show_tips($('.from-bookmark .progress-tip'), '书签栏中没有链接');
             return;
         }
+        let tmp = Object.keys(box);
+        let tmp_str = '缓存区';
+        if (tmp.includes(tmp_str)) {
+            box[tmp_str].qty += window.buffer_qty;
+        } else {
+            box[tmp_str] = { title: tmp_str, create_at: new Date().getTime(), qty: window.buffer_qty }
+        }
+        box = Object.values(box);
+        window.bok_links = [];
+        window.bok_boxs = {};
+        window.buffer_qty = 0;
+
         chrome.storage.local.get('dbox', function (res) {
             let obj = {};
             let last = '';
@@ -110,6 +98,36 @@ $('.from-bookmark').on('click', function () {
         show_tips($('.from-bookmark .progress-tip'), '已完成');
     });
 });
+
+function dump_tree_nodes(bookmark) {
+    for (let b of bookmark) {
+        // b -> bookmark bar / other bookmarks
+        // c -> folders
+        console.log(b);
+        for (let c of b.children) {
+            // 链接不在文件夹里面
+            if (!c.children && c.url) {
+                window.bok_links.push({ box: '缓存区', title: c.title, url: c.url, create_at: c.dateAdded });
+                window.buffer_qty++;
+                continue;
+            }
+            window.bok_boxs[c.title] = { title: c.title, create_at: c.dateAdded, qty: 0 };
+            dump_nodes(c.children, c.title); // links
+        }
+    }
+}
+
+function dump_nodes(children, box) {
+    for (let c of children) {
+        // subfolder
+        if (c.children) {
+            dump_tree_nodes([{ children: [c] }]);
+            continue;
+        }
+        window.bok_links.push({ box: box, title: c.title, url: c.url, create_at: c.dateAdded });
+        window.bok_boxs[box].qty++;
+    }
+}
 
 $('.from-json').click(function () {
     show_tips($(this).find('.progress-tip'), '还在写');
