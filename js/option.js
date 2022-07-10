@@ -1,6 +1,5 @@
 window.bok_links = [];
-window.bok_boxs = {};
-window.buffer_qty = 0;
+window.bok_boxs = [];
 $('.from-bookmark').on('click', function () {
     console.log('---> start <---');
     chrome.bookmarks.getTree(function (tree) {
@@ -8,95 +7,101 @@ $('.from-bookmark').on('click', function () {
         let link = window.bok_links;
         let box = window.bok_boxs;
         if (!link.length) {
-            show_tips($('.from-bookmark .progress-tip'), '书签栏中没有链接');
+            show_tips('.from-bookmark', '书签栏中没有链接');
             return;
         }
-        let tmp = Object.keys(box);
-        let tmp_str = '缓存区';
-        if (tmp.includes(tmp_str)) {
-            box[tmp_str].qty += window.buffer_qty;
-        } else {
-            box[tmp_str] = { title: tmp_str, create_at: new Date().getTime(), qty: window.buffer_qty }
-        }
-        box = Object.values(box);
         window.bok_links = [];
-        window.bok_boxs = {};
-        window.buffer_qty = 0;
-
-        chrome.storage.local.get('dbox', function (res) {
-            let obj = {};
-            let last = '';
-            if (Object.keys(res).length > 0) {
-                obj = res['dbox'];
-            } else {
-                let current = (new Date()).valueOf();
-                obj = {
-                    'a': { id: 0, name: '缓存区', bgc: '#ffffff', qty: 0, created_at: current, updated_at: current },
-                    'b': { id: 0, name: '回收站', bgc: '#ffffff', qty: 0, created_at: current, updated_at: current },
-                };
-            }
-            for (let o in obj) {
-                for (let b in box) {
-                    if (box[b].title == obj[o].name) {
-                        obj[o].qty += box[b].qty;
-                        box.splice(b, 1);
-                    }
-                }
-                last = o;
-            }
-            if (!box.length) {
-                return;
-            }
-            for (let b of box) {
-                last = bxf4e19973e_gen_key(last);
-                obj[last] = { id: 0, name: b.title, bgc: '#ffffff', qty: b.qty, created_at: b.create_at, updated_at: b.create_at }
-            }
-            let data = {};
-            data['dbox'] = obj;
-            chrome.storage.local.set(data, function() {
-                console.log('---> boox <---');
-            });
-        });
-
-        chrome.storage.local.get('links', function (res) {
-            let obj = [];
-            if (Object.keys(res).length > 0) {
-                obj = res['links'];
-                for (let b in obj) {
-                    for (let l in link) {
-                        if (link[l].url == obj[b].link) {
-                            link.splice(l, 1);
-                        }
-                    }
-                }
-            }
-            if (!link.length) {
-                return;
-            }
-            chrome.storage.local.get('dbox', function (res) {
-                let obj = [];
-                let data = res['dbox'];
-                let tmp = {};
-                for (let l of link) {
-                    let kid = 'a';
-                    for (let d in data) {
-                        if (data[d].name == l.box) {
-                            kid = d;
-                        }
-                    }
-                    tmp = { id: 0, aox: kid, box: kid, title: l.title, link: l.url, icon: '', created_at: l.create_at, updated_at: l.create_at };
-                    obj.push(tmp);
-                }
-                let list = {};
-                list['links'] = obj;
-                chrome.storage.local.set(list, function() {
-                    console.log('---> link <---');
-                });
-            });
-        });
-        show_tips($('.from-bookmark .progress-tip'), '已完成');
+        window.bok_boxs = [];
+        import_bok('.from-bookmark', link, box);
     });
 });
+
+$('.from-json').on('click', function () {
+    $('.j-file').trigger('click');
+});
+
+$('.j-file').on('change', function () {
+    let el = '.from-json';
+    if (!$('.j-file')[0].files.length) {
+        $('.fj-confirm').addClass('dye');
+        return show_tips(el, '未选择文件');
+    }
+    $('.fj-confirm').removeClass('dye');
+    return show_tips(el, '文件已就绪', false);
+});
+
+$('.fj-confirm').on('click', function () {
+    let file = $('.j-file')[0].files[0];
+    let reader = new FileReader();
+    let el = '.from-json';
+    reader.readAsText(file, 'UTF-8');
+    reader.onload = function (res) {
+        let str = res.target.result;
+        let json = JSON.parse(str);
+        if (!json) {
+            return show_tips(el, '请选择 json 文件');
+        }
+        if (!json.box || !json.link) {
+            return show_tips(el, '文件存在错误');
+        }
+        if (!Object.keys(json.box).length || !Object.keys(json.link).length) {
+            return show_tips(el, '文件存在空数据');
+        }
+        import_bok(el, json.link, json.box);
+        $('.fj-confirm').addClass('dye');
+        $('.j-file').val('');
+    }
+});
+
+$('.download').on('click', function () {
+    chrome.storage.local.get('dbox', function (res) {
+        let box = res['dbox'];
+        chrome.storage.local.get('links', function (res) {
+            let link = res['links'];
+            if (!link || !Object.keys(link).length) {
+                show_tips('.download', '没有数据可供下载');
+                return;
+            }
+            for (let b in box) {
+                box[b].qty = 0;
+                for (let i in link) {
+                    if (link[i].box == b) {
+                        link[i].box = box[b].name;
+                    }
+                }
+            }
+            box = Object.values(box);
+            const data = { box, link };
+            const str = JSON.stringify(data);
+            let elt_hid = document.createElement('a');
+            elt_hid.href = window.URL.createObjectURL(new Blob([str], { type: 'application/json' }));
+            elt_hid.target = '_blank';
+            elt_hid.download = 'bok.json';
+            elt_hid.click();
+            show_tips('.download', '下载成功');
+        });
+    });
+});
+
+$('.delete').on('click', function () {
+    chrome.storage.local.remove('dbox', function (res) {
+        console.log('dbox removed');
+    });
+    chrome.storage.local.remove('links', function (res) {
+        console.log('links removed');
+    });
+    show_tips(this, '已清空');
+});
+
+function show_tips(_this, msg, clear = true) {
+    let aim = $(_this).find('.progress-tip');
+    aim.text(msg);
+    if (clear) {
+        setTimeout(() => {
+            aim.text('');
+        }, 2000);
+    }
+}
 
 function dump_tree_nodes(bookmark) {
     for (let b of bookmark) {
@@ -105,11 +110,10 @@ function dump_tree_nodes(bookmark) {
         for (let c of b.children) {
             // 链接不在文件夹里面
             if (!c.children && c.url) {
-                window.bok_links.push({ box: '缓存区', title: c.title, url: c.url, create_at: c.dateAdded });
-                window.buffer_qty++;
+                push_link(c, '缓存区');
                 continue;
             }
-            window.bok_boxs[c.title] = { title: c.title, create_at: c.dateAdded, qty: 0 };
+            window.bok_boxs.push({ id: 0, name: c.title, bgc: '#ffffff', qty: 0, created_at: c.dateAdded, updated_at: c.dateAdded });
             dump_nodes(c.children, c.title); // links
         }
     }
@@ -122,49 +126,93 @@ function dump_nodes(children, box) {
             dump_tree_nodes([{ children: [c] }]);
             continue;
         }
-        window.bok_links.push({ box: box, title: c.title, url: c.url, create_at: c.dateAdded });
-        window.bok_boxs[box].qty++;
+        push_link(c, box);
     }
 }
 
-$('.from-json').click(function () {
-    show_tips($(this).find('.progress-tip'), '还在写');
-});
+function push_link(link, box) {
+    let _link = { id: 0, aox: '', box: box, title: link.title, link: link.url, icon: '', created_at: link.dateAdded, updated_at: link.dateAdded };
+    window.bok_links.push(_link);
+}
 
-$('.download').click(function () {
+function import_bok(_item, link, box) {
     chrome.storage.local.get('dbox', function (res) {
-        const box = res['dbox'];
-        chrome.storage.local.get('links', function (res) {
-            const link = res['links'];
-            if (!link || !Object.key(link).length) {
-                show_tips($('.download').find('.progress-tip'), '没有数据可供下载');
-                return;
+        let obj = {};
+        let last = '';
+        if (Object.keys(res).length > 0) {
+            obj = res['dbox'];
+        } else {
+            let current = (new Date()).valueOf();
+            obj = {
+                'a': { id: 0, name: '缓存区', bgc: '#ffffff', qty: 0, created_at: current, updated_at: current },
+                'b': { id: 0, name: '回收站', bgc: '#ffffff', qty: 0, created_at: current, updated_at: current },
+            };
+        }
+        for (let o in obj) {
+            for (let b in box) {
+                if (box[b].name == obj[o].name) {
+                    box.splice(b, 1);
+                }
             }
-            const data = {box, link};
-            const str = JSON.stringify(data);
-            let elt_hid = document.createElement('a');
-            elt_hid.href = window.URL.createObjectURL(new Blob([str], { type: 'application/json' }));
-            elt_hid.target = '_blank';
-            elt_hid.download = 'box.json';
-            elt_hid.click();
-            show_tips($('.download').find('.progress-tip'), '下载成功');
+            last = o;
+        }
+        if (!box.length) {
+            return;
+        }
+        for (let b of box) {
+            last = bxf4e19973e_gen_key(last);
+            obj[last] = b;
+        }
+        let data = {};
+        data['dbox'] = obj;
+        chrome.storage.local.set(data, function() {
+            console.log('---> boox <---');
         });
     });
-});
 
-$('.delete').click(function () {
-    chrome.storage.local.remove('dbox', function (res) {
-        console.log('dbox removed');
+    chrome.storage.local.get('links', function (res) {
+        let obj = [];
+        if (Object.keys(res).length > 0) {
+            obj = res['links'];
+            for (let b in obj) {
+                for (let l in link) {
+                    if (link[l].link == obj[b].link) {
+                        link.splice(l, 1);
+                    }
+                }
+            }
+        }
+        if (!link.length) {
+            return;
+        }
+        chrome.storage.local.get('dbox', function (res) {
+            let obj = [];
+            let data = res['dbox'];
+            for (let l of link) {
+                let kid = 'a';
+                for (let d in data) {
+                    if (data[d].name == l.box) {
+                        kid = d;
+                        data[d].qty++;
+                    }
+                }
+                l.box = kid;
+                if (!l.aox) {
+                    l.aox = kid;
+                }
+                obj.push(l);
+            }
+            let list = {};
+            list['links'] = obj;
+            chrome.storage.local.set(list, function() {
+                console.log('---> link <---');
+            });
+            list = {};
+            list['dbox'] = data;
+            chrome.storage.local.set(list, function() {
+                console.log('---> update box qty <---');
+            });
+        });
     });
-    chrome.storage.local.remove('links', function (res) {
-        console.log('links removed');
-    });
-    show_tips($(this).find('.progress-tip'), '已清空');
-});
-
-function show_tips(aim, msg) {
-    aim.text(msg);
-    setTimeout(() => {
-        aim.text('');
-    }, 1500);
+    show_tips(_item, '已完成');
 }

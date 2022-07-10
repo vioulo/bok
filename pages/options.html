@@ -36,6 +36,7 @@
             width: 600px;
             height: 300px;
             padding: 1rem;
+            position: relative;
         }
         .list {
             padding: 1rem;
@@ -64,6 +65,17 @@
             right: 6px;
             font-size: 12px;
         }
+        .dye {
+            display: none !important;
+        }
+        .fj-confirm {
+            position: absolute;
+            right: -50px;
+            top: 97px;
+            background: #088937;
+            padding: 0.2rem 0.6rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="flex-c xy-center">
@@ -87,7 +99,11 @@
                 <font class="progress-tip"></font>
             </div>
         </div>
+        <div class="fj-confirm dye">确定</div>
         <div class="version">v 0.5</div>
+    </div>
+    <div class="hide-eara dye">
+        <input class="j-file" type="file">
     </div>
 </body>
 <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
