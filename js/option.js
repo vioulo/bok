@@ -136,6 +136,8 @@ function push_link(link, box) {
 }
 
 function import_bok(_item, link, box) {
+    link = obj_unique(link, 'link');
+    box = obj_unique(box, 'name');
     chrome.storage.local.get('dbox', function (res) {
         let obj = {};
         let last = '';

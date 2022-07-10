@@ -30,3 +30,9 @@ function bxf4e19973e_gen_key(key) {
     }
     return c_arr.reverse().join('');
 }
+
+// 根据数组对象的某个字段去重
+function obj_unique(arr, val) {
+    const res = new Map();
+    return arr.filter(item => !res.has(item[val]) && res.set(item[val], 1))
+}
