@@ -176,12 +176,26 @@ function keydown_e() {
     create_dbox(obj);
 }
 
+function sort_box_key(box) {
+    let karr = {};
+    if (!box) return karr;
+    let bks = Object.keys(box);
+    for (let b of bks) {
+        let num = 0;
+        for (let i = 0; i < b.length; i++) {
+            num += b[i].charCodeAt();
+        }
+        karr[num] = b;
+    }
+    return Object.values(karr);
+}
+
 // list content
 function keydown_r() {
     if ($(".aBox").length == 1) return;
     let dbox = sor.get('dbox');
     let insi = '<div class="empty-box">尚无内容</div>';
-    let bkey = Object.keys(dbox);
+    let bkey = sort_box_key(dbox);
     if (bkey.length) {
         insi = '';
         let points = '';
@@ -497,7 +511,7 @@ function show_box(kid) {
     let box_obj = boxs[kid];
     let left_inside = '';
     let left_item_class = '';
-    let bkey = Object.keys(boxs);
+    let bkey = sort_box_key(boxs);
     for (let b of bkey) {
         let rek = '';
         let sign = '';
@@ -664,7 +678,7 @@ function inside_right(kid) {
 function show_bpx() {
     let box = sor.get('dbox');
     let lview = '<div class="bpx list-view ib-scroll">';
-    let bkey = Object.keys(box);
+    let bkey = sort_box_key(box);
     if (bkey.length) {
         for (let b of bkey) {
             if (b == 'b') continue;
