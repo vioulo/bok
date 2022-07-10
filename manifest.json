@@ -1,7 +1,7 @@
 {
     "name": "bok",
     "description": "一个简单的网页收集器",
-    "version": "0.3",
+    "version": "0.7",
     "manifest_version": 3,
     "omnibox": { "keyword" : "bok" },
     "options_page": "./pages/options.html",
