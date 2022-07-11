@@ -26,14 +26,18 @@ $('.j-file').on('change', function () {
         $('.fj-confirm').addClass('dye');
         return show_tips(el, '未选择文件');
     }
+    let fname = $('.j-file')[0].files[0].name;
+    if (fname.substring(fname.indexOf('.') + 1) != 'json') {
+        return show_tips(el, '请选择 json 文件');
+    }
     $('.fj-confirm').removeClass('dye');
     return show_tips(el, '文件已就绪', false);
 });
 
 $('.fj-confirm').on('click', function () {
     let file = $('.j-file')[0].files[0];
-    let reader = new FileReader();
     let el = '.from-json';
+    let reader = new FileReader();
     reader.readAsText(file, 'UTF-8');
     reader.onload = function (res) {
         let str = res.target.result;
@@ -62,21 +66,28 @@ $('.download').on('click', function () {
                 show_tips('.download', '没有数据可供下载');
                 return;
             }
-            for (let b in box) {
-                box[b].qty = 0;
-                for (let i in link) {
+            // 修改 link box 以在导入时匹配
+            for (let i in link) {
+                for (let b in box) {
                     if (link[i].box == b) {
                         link[i].box = box[b].name;
                     }
                 }
             }
-            box = Object.values(box);
-            const data = { box, link };
+            // 对 box 进行排序，使导入后的数据与现有减小差异
+            let bkey = bxf4e19973e_sort_bkey(box);
+            let barr = [];
+            for (let b of bkey) {
+                barr.push(box[b]);
+            }
+            const data = { box: barr, link };
             const str = JSON.stringify(data);
+            let seconds = parseInt(new Date().getTime() / 1000);
+            let dname = `bok-B${barr.length}-L${link.length}-${seconds}.json`;
             let elt_hid = document.createElement('a');
             elt_hid.href = window.URL.createObjectURL(new Blob([str], { type: 'application/json' }));
             elt_hid.target = '_blank';
-            elt_hid.download = 'bok.json';
+            elt_hid.download = dname;
             elt_hid.click();
             show_tips('.download', '下载成功');
         });
@@ -136,11 +147,10 @@ function push_link(link, box) {
 }
 
 function import_bok(_item, link, box) {
-    link = obj_unique(link, 'link');
-    box = obj_unique(box, 'name');
+    link = bxf4e19973e_obj_unique(link, 'link');
+    box = bxf4e19973e_obj_unique(box, 'name');
     chrome.storage.local.get('dbox', function (res) {
         let obj = {};
-        let last = '';
         if (Object.keys(res).length > 0) {
             obj = res['dbox'];
         } else {
@@ -156,11 +166,12 @@ function import_bok(_item, link, box) {
                     box.splice(b, 1);
                 }
             }
-            last = o;
         }
         if (!box.length) {
             return;
         }
+        let bkey = bxf4e19973e_sort_bkey(obj);
+        let last = bkey[bkey.length - 1];
         for (let b of box) {
             last = bxf4e19973e_gen_key(last);
             obj[last] = b;
@@ -173,12 +184,12 @@ function import_bok(_item, link, box) {
     });
 
     chrome.storage.local.get('links', function (res) {
-        let obj = [];
+        let arr = [];
         if (Object.keys(res).length > 0) {
-            obj = res['links'];
-            for (let b in obj) {
+            arr = res['links'];
+            for (let b in arr) {
                 for (let l in link) {
-                    if (link[l].link == obj[b].link) {
+                    if (link[l].link == arr[b].link) {
                         link.splice(l, 1);
                     }
                 }
@@ -188,7 +199,6 @@ function import_bok(_item, link, box) {
             return;
         }
         chrome.storage.local.get('dbox', function (res) {
-            let obj = [];
             let data = res['dbox'];
             for (let l of link) {
                 let kid = 'a';
@@ -202,10 +212,10 @@ function import_bok(_item, link, box) {
                 if (!l.aox) {
                     l.aox = kid;
                 }
-                obj.push(l);
+                arr.push(l);
             }
             let list = {};
-            list['links'] = obj;
+            list['links'] = arr;
             chrome.storage.local.set(list, function() {
                 console.log('---> link <---');
             });
