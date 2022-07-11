@@ -54,29 +54,6 @@ let sor = {
 
 sor.init();
 
-let tool = {
-    dateformat: (fmt, date) => {
-        let ret;
-        const opt = {
-            "Y+": date.getFullYear().toString(),        // 年
-            "m+": (date.getMonth() + 1).toString(),     // 月
-            "d+": date.getDate().toString(),            // 日
-            "H+": date.getHours().toString(),           // 时
-            "M+": date.getMinutes().toString(),         // 分
-            "S+": date.getSeconds().toString()          // 秒
-        };
-        for (let k in opt) {
-            ret = new RegExp("(" + k + ")").exec(fmt);
-            if (ret) {
-                fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-            };
-        };
-        return fmt;
-        // let date = new Date()
-        // dateFormat("YYYY-mm-dd HH:MM", date)
-    },
-}
-
 $(document).on('keyup', function(e) {
     if ($(document.activeElement).attr('type') == "text") return;
     cmd += e.key;
@@ -176,26 +153,12 @@ function keydown_e() {
     create_dbox(obj);
 }
 
-function sort_box_key(box) {
-    let karr = {};
-    if (!box) return karr;
-    let bks = Object.keys(box);
-    for (let b of bks) {
-        let num = 0;
-        for (let i = 0; i < b.length; i++) {
-            num += b[i].charCodeAt();
-        }
-        karr[num] = b;
-    }
-    return Object.values(karr);
-}
-
 // list content
 function keydown_r() {
     if ($(".aBox").length == 1) return;
     let dbox = sor.get('dbox');
     let insi = '<div class="empty-box">尚无内容</div>';
-    let bkey = sort_box_key(dbox);
+    let bkey = bxf4e19973e_sort_bkey(dbox);
     if (bkey.length) {
         insi = '';
         let points = '';
@@ -511,7 +474,7 @@ function show_box(kid) {
     let box_obj = boxs[kid];
     let left_inside = '';
     let left_item_class = '';
-    let bkey = sort_box_key(boxs);
+    let bkey = bxf4e19973e_sort_bkey(boxs);
     for (let b of bkey) {
         let rek = '';
         let sign = '';
@@ -678,7 +641,7 @@ function inside_right(kid) {
 function show_bpx() {
     let box = sor.get('dbox');
     let lview = '<div class="bpx list-view ib-scroll">';
-    let bkey = sort_box_key(box);
+    let bkey = bxf4e19973e_sort_bkey(box);
     if (bkey.length) {
         for (let b of bkey) {
             if (b == 'b') continue;
