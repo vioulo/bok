@@ -32,7 +32,42 @@ function bxf4e19973e_gen_key(key) {
 }
 
 // 根据数组对象的某个字段去重
-function obj_unique(arr, val) {
+function bxf4e19973e_obj_unique(arr, val) {
     const res = new Map();
     return arr.filter(item => !res.has(item[val]) && res.set(item[val], 1))
+}
+
+function bxf4e19973e_sort_bkey(box) {
+    let karr = {};
+    if (!box) return karr;
+    let bks = Object.keys(box);
+    for (let b of bks) {
+        let num = 0;
+        for (let i = 0; i < b.length; i++) {
+            num += b[i].charCodeAt();
+        }
+        karr[num] = b;
+    }
+    return Object.values(karr);
+}
+
+function bxf4e19973e_date_format(fmt, date) {
+    let ret;
+    const opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+    };
+    for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        };
+    };
+    return fmt;
+    // let date = new Date()
+    // dateFormat("YYYY-mm-dd HH:MM", date)
 }
