@@ -75,7 +75,7 @@ $('.download').on('click', function () {
                 }
             }
             // 对 box 进行排序，使导入后的数据与现有减小差异
-            let bkey = bxf4e19973e_sort_bkey(box);
+            let bkey = bxf4e19e73u_sort_bkey(box);
             let barr = [];
             for (let b of bkey) {
                 barr.push(box[b]);
@@ -147,8 +147,8 @@ function push_link(link, box) {
 }
 
 function import_bok(_item, link, box) {
-    link = bxf4e19973e_obj_unique(link, 'link');
-    box = bxf4e19973e_obj_unique(box, 'name');
+    link = bxf4e19e73u_obj_unique(link, 'link');
+    box = bxf4e19e73u_obj_unique(box, 'name');
     chrome.storage.local.get('dbox', function (res) {
         let obj = {};
         if (Object.keys(res).length > 0) {
@@ -170,10 +170,10 @@ function import_bok(_item, link, box) {
         if (!box.length) {
             return;
         }
-        let bkey = bxf4e19973e_sort_bkey(obj);
+        let bkey = bxf4e19e73u_sort_bkey(obj);
         let last = bkey[bkey.length - 1];
         for (let b of box) {
-            last = bxf4e19973e_gen_key(last);
+            last = bxf4e19e73u_gen_key(last);
             obj[last] = b;
         }
         let data = {};
