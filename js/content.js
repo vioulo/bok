@@ -88,8 +88,8 @@ $(document).on('keydown', function (e) {
             _back = 0;
         }
         if (_back == 1) {
-            if ($('.line-list').length) {
-                $('.line-list').remove();
+            if ($('.box-list').length) {
+                $('.box-list').remove();
                 $('.aBox-btn').removeClass('dye');
             }
         }
@@ -110,7 +110,7 @@ $(document).on("keydown", function(e) {
             $('.bxf4e19e73u-blk').each(function (k, v) {
                 let t = k + 1;
                 $(v).addClass('mk-blk' + t);
-                $(v).append(`<div class="flex xy-center bxf4e19e73u-mask"><div class="bxf4e19e73u-mask-t">${t}</div></div>`);
+                $(v).append(`<div class="bok-flex f-xyc bxf4e19e73u-mask"><div class="bxf4e19e73u-mask-t">${t}</div></div>`);
             });
         }
         return;
@@ -118,6 +118,7 @@ $(document).on("keydown", function(e) {
     let k = {
         '49': 1,
         '50': 2,
+        '51': 3,
     };
     $('.mk-blk' + k[key]).remove();
 });
@@ -125,7 +126,7 @@ $(document).on("keydown", function(e) {
 
 function keydown_w() {
     if ($(".bok-link-v").length == 1) return;
-    $(".bok-tr-blk").remove();
+    $(".bok-rt-blk").remove();
     let obj = {
         tit: '收集链接',
         kid: 0,
@@ -141,7 +142,7 @@ function keydown_w() {
 // new box
 function keydown_e() {
     if ($(".bok-box-v").length == 1) return;
-    $(".bok-tr-blk").remove();
+    $(".bok-rt-blk").remove();
     let obj = {
         title: '创建云奁',
         kid: 0,
@@ -170,7 +171,7 @@ function keydown_r() {
         }
     }
 
-    let box = `<div class="bxf4e19e73u-blk aBox"><div class="in-aBox aBox-btn"><div class="aBox-list">${insi}</div></div></div>`;
+    let box = `<div class="bxf4e19e73u-blk aBox"><div class="in-aBox aBox-btn"><div class="aBox-list bok-flex bok-fw gap-5">${insi}</div></div></div>`;
     $('body').append(box);
     $('.in-aBox .bok-btn').on('click', function() {
         if ($(this).attr('canin') == 'yes') {
@@ -216,7 +217,7 @@ function keydown_r() {
 }
 
 function remove_dbox_view(id, text) {
-    let el_bg_msg = `<div class="flex xy-center bg-msg"><div class="bok-f-dc f-xyc bg-msg-inner" ><div class="title">将 &lt; ${text} &gt; 🚀</div>
+    let el_bg_msg = `<div class="bok-flex f-xyc bg-msg"><div class="bok-f-dc f-xyc bg-msg-inner" ><div class="title">将 &lt; ${text} &gt; 🚀</div>
     <div class="btn-group"><ibk class="bok-btn toRecycle" bid="${id}">回收</ibk><ibk class="bok-btn toDiscard" bid="${id}">丢弃</ibk><ibk class="bok-btn toCancel" bid="${id}">取消</ibk></div></div></div>`;
     
     $('.bxf4e19e73u-blk.aBox').append(el_bg_msg);
@@ -288,10 +289,10 @@ function create_dbox(obj) {
         }
         bg_str += `<div class="bgc-bk bok-f-dc f-xyc" bgc="${c}"><div class="bgc-b ${bg_active}"></div><div class="bok-bgc" style="background:${c};"></div></div>`;
     }
-    let html = `<div class="bxf4e19e73u-blk bok-tr-blk bok-box-v bok-flex f-xyc">
+    let html = `<div class="bxf4e19e73u-blk bok-rt-blk bok-box-v bok-flex f-xyc">
     <div><div class="btb-item"><ibk>${obj.title}</ibk></div>
     <div class="btb-item cloud-bpx"><ibk class="bt-area" kid="${obj.kid}">云奁：</ibk>
-    <input type="text" class="input nbox" value="${obj.name}">
+    <input type="text" class="bok-iut nbox" value="${obj.name}">
     <!--<ibk class="cloud-bpx-tips">有时候</ibk>-->
     </div><div class="btb-item"><ibk>背景：</ibk><div class="bgc-group bok-flex x-sb">${bg_str}</div></div>
     <div class="btb-item"><div class="bok-flex x-flex-end msg-area">
@@ -317,13 +318,13 @@ function create_dbox(obj) {
 }
 
 function create_link(obj) {
-    let html = `<div class="bxf4e19e73u-blk bok-tr-blk bok-link-v bok-flex f-xyc">
+    let html = `<div class="bxf4e19e73u-blk bok-rt-blk bok-link-v bok-flex f-xyc">
     <div><div class="btb-item"><ibk>${obj.tit}</ibk></div>
-    <div class="btb-item"><ibk>云奁：</ibk><input type="text" class="input dbox" value="${obj.box}"><ibk class="bok-btn bok-box-ch" is_show="0">选择</ibk></div>
-    <div class="btb-item"><ibk>标题：</ibk><input type="text" class="input dtle" value="${obj.title}"></div>
-    <div class="btb-item"><ibk>链接：</ibk><input type="text" class="input dlnk" value="${obj.link}"></div>
-    <div class="btb-item dye"><ibk>icon：</ibk><input type="hidden" class="input bok-site-icon" value=""></div>
-    <div class="btb-item"><div class="flex x-flex-end msg-area"><ibk class="bok-btn bok-tips hide-text dye"></ibk>
+    <div class="btb-item"><ibk>云奁：</ibk><input type="text" class="bok-iut dbox" value="${obj.box}"><ibk class="bok-btn bok-box-ch" is_show="0">选择</ibk></div>
+    <div class="btb-item"><ibk>标题：</ibk><input type="text" class="bok-iut dtle" value="${obj.title}"></div>
+    <div class="btb-item"><ibk>链接：</ibk><input type="text" class="bok-iut dlnk" value="${obj.link}"></div>
+    <div class="btb-item dye"><ibk>icon：</ibk><input type="hidden" class="bok-iut bok-site-icon" value=""></div>
+    <div class="btb-item"><div class="bok-flex x-flex-end msg-area"><ibk class="bok-btn bok-tips hide-text dye"></ibk>
     <ibk class="bok-btn ${obj['action'][0]}" kid="${obj.kid}" lid="${obj.lid}">${obj['action'][1]}</ibk></div></div></div></div>`;
     $('body').append(html);
 
@@ -470,10 +471,10 @@ function show_box(kid) {
             rek = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
-        left_inside += `<div class="box-item ${left_item_class} ${rek}" style="background:${boxs[b].bgc};" kid="${b}"><bem>${sign}<blk>${boxs[b].name}</blk></bem><nbr>${boxs[b].qty}</nbr></div>`;
+        left_inside += `<div class="bok-flex f-xyc box-item ${left_item_class} ${rek}" style="background:${boxs[b].bgc};" kid="${b}"><bem>${sign}<blk>${boxs[b].name}</blk></bem><nbr>${boxs[b].qty}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
-    let cont = `<div class="in-aBox line-list flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
+    let cont = `<div class="in-aBox box-list bok-flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
     $('.aBox-btn').addClass('dye');
     $('.aBox').append(cont);
 
@@ -619,7 +620,7 @@ function inside_right(kid) {
 
 function list_box() {
     let box = sor.get('dbox');
-    let lview = '<div class="bxf4e19e73u-blk bok-boxs ib-scroll">';
+    let lview = '<div class="bxf4e19e73u-blk bok-rt-blk bok-boxs ib-scroll">';
     let bkey = bxf4e19e73u_sort_bkey(box);
     if (bkey.length) {
         for (let b of bkey) {
@@ -749,14 +750,14 @@ function _update_dbox(kid, dbox, reMsg) {
 
 function show_tips(msg, alone) {
     if (!alone) {
-        $('.bok-tr-blk .bok-tips').text(msg);
-        $('.bok-tr-blk .bok-tips').removeClass('dye');
+        $('.bok-rt-blk .bok-tips').text(msg);
+        $('.bok-rt-blk .bok-tips').removeClass('dye');
         return;
     }
-    $('.bok-tr-blk').empty();
-    $('.bok-tr-blk').append(`<div class="bok-flex f-xyc alone-msg">--- ${msg} ---</div>`);
+    $('.bok-rt-blk').empty();
+    $('.bok-rt-blk').append(`<div class="bok-flex f-xyc alone-msg">--- ${msg} ---</div>`);
     setTimeout(function() {
-        $('.bok-tr-blk').remove();
+        $('.bok-rt-blk').remove();
     }, 2000);
 }
 

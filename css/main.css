@@ -10,6 +10,9 @@
     display: flex;
     flex-direction: column;
 }
+.bok-fw {
+    flex-wrap: wrap;
+}
 .f-xyc {
     align-items: center;
     justify-content: center;
@@ -29,22 +32,32 @@
 .dye {
     display: none !important;
 }
+.gap-5 {
+    gap: 5px;
+}
 .hide-text {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 /* bok top right block */
-.bok-tr-blk {
-    width: 390px;
+.bok-rt-blk {
+    width: 396px;
     letter-spacing: 1px;
     position: fixed;
     top: 12px;
     right: 12px;
     z-index: 999999;
-    border: 1px solid #efeeee;
+    border: 1px solid #979797;
     border-radius: 4px;
     background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+.bok-rt-blk .bok-iut, .bgc-group {
+    width: 307px;
+}
+.bok-iut.dbox {
+    width: 250px;
 }
 .btb-item {
     margin: 12px;
@@ -100,8 +113,8 @@
     margin-left: 4px;
 }
 .bok-boxs {
-    width: 370px;
-    max-height: 600px;
+    width: auto;
+    max-height: 300px;
     top: 236px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -112,7 +125,7 @@
 }
 .bok-boxs ibk {
     display: inline-block;
-    width: 60px;
+    width: 90px;
     border: 1px solid #ccc;
     border-radius: 2px;
     padding: 3px 7px;
@@ -127,6 +140,7 @@
     border: 1px solid #ccc;
     border-radius: 2px;
     padding: 2.5px 12px;
+    line-height: 22px;
     cursor: pointer;
     user-select: none;
     font-weight: unset !important;
@@ -140,8 +154,8 @@
     border-color: #00adff;
     color: #fff;
 }
-.msg-area, .bgc-group {
-    width: 252px;
+.msg-area {
+    width: 100%;
 }
 .alone-msg {
     height: 50px;
@@ -151,8 +165,8 @@
     font-size: 16px;
 }
 .bok-bgc {
-    width: 10px;
-    height: 17px;
+    width: 12px;
+    height: 19px;
     border: 1px solid #000;
     border-radius: 2px;
     cursor: pointer;
@@ -161,8 +175,8 @@
     border: 1px dashed;
 }
 .bgc-b {
-    width: 10px;
-    height: 4px;
+    width: 12px;
+    height: 6px;
     border: 1px solid #fff;
     margin-bottom: 2px;
 }
@@ -203,8 +217,8 @@
     z-index: 999998;
 }
 .in-aBox {
-    width: 970px;
-    height: 330px;
+    width: auto;
+    height: 100%;
     padding: 15px;
     overflow: hidden;
     position: relative;
@@ -231,7 +245,7 @@
     position: relative;
     margin-right: 6px;
     margin-bottom: 6px;
-    min-width: 52px;
+    min-width: 90px;
     text-align: center;
 }
 .btn-group .bok-btn {
@@ -309,11 +323,11 @@
     overflow-y: scroll;
 }
 .in-aBox-left {
-    padding-right: 16px;
+    padding-right: 12px;
     border-right: 1px solid #959595;
 }
 .in-aBox-right {
-    width: 823px;
+    width: 827px;
     padding: 0 12px;
     padding-right: 0;
 }
@@ -329,15 +343,21 @@
     font-size: 50px;
     letter-spacing: 20px;
 }
+.box-list {
+    width: auto;
+    height: 360px;
+}
 .box-item {
-    display: flex;
-    justify-content: space-between;
+    height: 25px;
     padding: 2px 7px;
     border: 1px solid #ccc;
     border-radius: 2px;
     margin-bottom: 6px;
     cursor: pointer;
     user-select: none;
+}
+.box-item:last-child {
+    margin-bottom: 0;
 }
 .in-aBox-left .box-item {
     width: 130px;
@@ -390,6 +410,13 @@
 .in-aBox-right .link-item:hover>point {
     display: unset;
 }
+.link-item:last-child {
+    margin-bottom: 0;
+}
+.link-item img {
+    width: 16px;
+    margin-right: 10px;
+}
 .img-space {
     width: 20px;
     height: 20px;
@@ -406,10 +433,6 @@
 }
 .rbin:hover>bem>.emoji-empty {
     display: unset;
-}
-.link-item img {
-    width: 16px;
-    margin-right: 10px;
 }
 .ib-scroll::-webkit-scrollbar {
     display: none;
