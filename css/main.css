@@ -1,7 +1,7 @@
-.bxf4e19e73u-blk {
+.bxf4e19e73u-blk * {
     font-size: 12px;
-    color: #00195f;
-    box-sizing: unset !important;
+    color: #3e3e3e;
+    box-sizing: border-box !important;
 }
 .bok-flex {
     display: flex;
@@ -61,6 +61,13 @@
 }
 .bok-rt-blk .bok-iut, .bgc-group {
     width: 307px;
+}
+.bok-iut {
+    line-height: 22px;
+    padding: 2px;
+    border: 1px solid #002bff;
+    border-radius: 2px;
+    outline: none;
 }
 .bok-iut.dbox {
     width: 250px;
@@ -223,12 +230,13 @@
     z-index: 999998;
 }
 .in-aBox {
+    height: 360px;
     overflow: hidden;
     position: relative;
     text-align: left;
 }
 .aBox-list {
-    height: 336px;
+    height: 100%;
     padding: 12px;
     overflow: hidden;
     overflow-y: scroll;
@@ -334,7 +342,7 @@
     border-right: 1px solid #959595;
 }
 .in-aBox-right {
-    width: 827px;
+    width: 833px;
     padding: 0 12px;
     padding-right: 0;
 }
@@ -351,7 +359,7 @@
     letter-spacing: 20px;
 }
 .box-list {
-    height: 336px;
+    height: 100%;
     padding: 12px;
 }
 .box-item {
