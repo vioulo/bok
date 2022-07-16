@@ -484,7 +484,7 @@ function show_box(kid) {
             rek = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
-        left_inside += `<div class="bok-flex f-xyc box-item ${left_item_class} ${rek}" style="background:${boxs[b].bgc};" kid="${b}"><bem>${sign}<blk>${boxs[b].name}</blk></bem><nbr>${boxs[b].qty}</nbr></div>`;
+        left_inside += `<div class="bok-flex f-xyc box-item ${left_item_class} ${rek}" style="background:${boxs[b].bgc};" kid="${b}" title="${boxs[b].name}"><bem>${sign}<blk>${boxs[b].name}</blk></bem><nbr>${boxs[b].qty}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
     let cont = `<div class="in-aBox box-list bok-flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
@@ -629,13 +629,13 @@ function recover_link(lid) {
 
 function inside_right(kid) {
     let links = sor.get('links');
-    let insi  = '<div class="empty-box">尚无内容</div>';
+    let c_ety  = '<div class="empty-box">尚无内容</div>';
     let edibk = '<point class="e-ope emoji-edit" title="编辑">🥦</point><point class="e-ope emoji-del" title="删除">🍁</point>';
     if (kid == 'b') {
         edibk = '<point class="e-ope emoji-recover" title="恢复">🌿</point>';
     }
+    let c_insi = '';
     if (Object.keys(links).length > 0) {
-        insi = '';
         let icon = '';
         let word = '';
         for (let i in links) {
@@ -645,11 +645,11 @@ function inside_right(kid) {
                 if (links[i].icon != '') {
                     icon = `<img src="${links[i].icon}">`;
                 }
-                insi += `<div class="link-item" lid="${i}">${icon}<a href="${links[i].link}" target='_blank' class="hide-text">${links[i].title}</a>${edibk}</div>`;
+                c_insi += `<div class="link-item" lid="${i}">${icon}<a href="${links[i].link}" target='_blank' class="hide-text">${links[i].title}</a>${edibk}</div>`;
             }
         }
     }
-    return insi;
+    return c_insi || c_ety;
 }
 
 function list_box() {

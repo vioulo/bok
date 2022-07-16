@@ -378,6 +378,8 @@
     display: inline-block;
     width: 90px;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .in-aBox-left nbr {
     display: none;
