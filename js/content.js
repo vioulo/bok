@@ -171,7 +171,7 @@ function keydown_r() {
         }
     }
 
-    let box = `<div class="bxf4e19e73u-blk aBox"><div class="in-aBox aBox-btn"><div class="aBox-list bok-flex bok-fw gap-5">${insi}</div></div></div>`;
+    let box = `<div class="bxf4e19e73u-blk aBox"><div class="in-aBox aBox-btn"><div class="aBox-list bok-grid g-6 gap-5 ib-scroll">${insi}</div></div></div>`;
     $('body').append(box);
     $('.in-aBox .bok-btn').on('click', function() {
         if ($(this).attr('canin') == 'yes') {
@@ -217,7 +217,7 @@ function keydown_r() {
 }
 
 function remove_dbox_view(id, text) {
-    let el_bg_msg = `<div class="bok-flex f-xyc bg-msg"><div class="bok-f-dc f-xyc bg-msg-inner" ><div class="title">将 &lt; ${text} &gt; 🚀</div>
+    let el_bg_msg = `<div class="bok-flex f-xyc bg-msg"><div class="bok-f-dc f-xyc bg-msg-inner" ><div class="popup-t">将 &lt; ${text} &gt; 🚀</div>
     <div class="btn-group"><ibk class="bok-btn toRecycle" bid="${id}">回收</ibk><ibk class="bok-btn toDiscard" bid="${id}">丢弃</ibk><ibk class="bok-btn toCancel" bid="${id}">取消</ibk></div></div></div>`;
     
     $('.bxf4e19e73u-blk.aBox').append(el_bg_msg);
@@ -494,7 +494,7 @@ function show_box(kid) {
     });
 
     $('.emoji-empty').on('click', function () {
-        let el_bg_msg = `<div class="bok-flex f-xyc bg-msg"><div class="bok-f-dc f-xyc bg-msg-inner"><div class="title">清空回收站？ 🚀</div>
+        let el_bg_msg = `<div class="bok-flex f-xyc bg-msg"><div class="bok-f-dc f-xyc bg-msg-inner"><div class="popup-t">清空回收站？ 🚀</div>
         <div class="btn-group"><ibk class="bok-btn ey-confirm">确认</ibk><ibk class="bok-btn ey-cancel">取消</ibk></div></div></div>`;
         $('.bxf4e19e73u-blk.aBox').append(el_bg_msg);
         $('.ey-confirm').on('click', function () {

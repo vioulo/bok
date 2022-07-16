@@ -32,6 +32,12 @@
 .dye {
     display: none !important;
 }
+.bok-grid {
+    display: grid;
+}
+.g-6 {
+    grid-template-columns: repeat(6, 1fr);
+}
 .gap-5 {
     gap: 5px;
 }
@@ -217,12 +223,15 @@
     z-index: 999998;
 }
 .in-aBox {
-    width: auto;
-    height: 100%;
-    padding: 15px;
     overflow: hidden;
     position: relative;
     text-align: left;
+}
+.aBox-list {
+    height: 336px;
+    padding: 12px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 .emoji-edit, .emoji-del {
     position: absolute;
@@ -243,8 +252,6 @@
 }
 .in-aBox .bok-btn {
     position: relative;
-    margin-right: 6px;
-    margin-bottom: 6px;
     min-width: 90px;
     text-align: center;
 }
@@ -298,7 +305,7 @@
     background: #fff;
     box-shadow: 5px -5px 0px 0px #2c79ca29;
 }
-.bg-msg-inner .title {
+.bg-msg-inner .popup-t {
     width: 100%;
     text-align: center;
     border-bottom: 1px dotted #000;
@@ -344,8 +351,8 @@
     letter-spacing: 20px;
 }
 .box-list {
-    width: auto;
-    height: 360px;
+    height: 336px;
+    padding: 12px;
 }
 .box-item {
     height: 25px;
