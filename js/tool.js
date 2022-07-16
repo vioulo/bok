@@ -42,11 +42,11 @@ function bxf4e19e73u_sort_bkey(box) {
     if (!box) return karr;
     let bks = Object.keys(box);
     for (let b of bks) {
-        let num = 0;
+        let str = '';
         for (let i = 0; i < b.length; i++) {
-            num += b[i].charCodeAt();
+            str += String(b[i].charCodeAt());
         }
-        karr[num] = b;
+        karr[str] = b;
     }
     return Object.values(karr);
 }
