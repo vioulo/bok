@@ -764,14 +764,15 @@ function _update_dbox(kid, dbox, reMsg) {
     list[kid] = new_item;
     sor.set('dbox', list);
     if (reMsg) {
+        let el_aim = $(`.bok-btn[kid='${kid}']`);
         // reMsg 仅当从列表编辑的时候为 true
         if (new_item.name != item.name) {
             // 如果名称被更新了，则更新打开的列表中的名称
-            $('.bok-btn font').each(function() {
-                if ($(this).text() == item.name) {
-                    $(this).text(new_item.name);
-                }
-            });
+            el_aim.text(new_item.name);
+        }
+        // update background color
+        if (new_item.bgc != item.bgc) {
+            el_aim.attr('style', 'background:' + new_item.bgc);
         }
         return show_tips('更新成功', true);
     }
