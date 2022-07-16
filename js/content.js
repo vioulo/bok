@@ -457,6 +457,11 @@ function update_link() {
         new_box[kid].qty -= 1;
         new_box[box_id].qty += 1;
         sor.set('dbox', new_box);
+        // remove link
+        $(`.link-item[lid='${lid}']`).remove();
+        // updae view qty
+        $(`.box-item[kid='${kid}'] nbr`).text(new_box[kid].qty);
+        $(`.box-item[kid='${box_id}'] nbr`).text(new_box[box_id].qty);
     }
     return show_tips('更新成功', true);
 }
