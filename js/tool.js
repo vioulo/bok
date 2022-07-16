@@ -1,4 +1,4 @@
-function bxf4e19973e_gen_key(key) {
+function bxf4e19e73u_gen_key(key) {
     if (!key) {
         return 'a';
     }
@@ -32,26 +32,35 @@ function bxf4e19973e_gen_key(key) {
 }
 
 // 根据数组对象的某个字段去重
-function bxf4e19973e_obj_unique(arr, val) {
+function bxf4e19e73u_obj_unique(arr, val) {
     const res = new Map();
     return arr.filter(item => !res.has(item[val]) && res.set(item[val], 1))
 }
 
-function bxf4e19973e_sort_bkey(box) {
+function bxf4e19e73u_sort_bkey(box) {
     let karr = {};
     if (!box) return karr;
     let bks = Object.keys(box);
+    let obj = {};
     for (let b of bks) {
-        let num = 0;
-        for (let i = 0; i < b.length; i++) {
-            num += b[i].charCodeAt();
+        let l = b.length;
+        if (!obj[l]) {
+            obj[l] = [];
         }
-        karr[num] = b;
+        obj[l].push(b);
+    }
+    let i = 0;
+    for (let k in obj) {
+        let b = obj[k].sort();
+        for (let j of b) {
+            karr[i] = j;
+            i++;
+        }
     }
     return Object.values(karr);
 }
 
-function bxf4e19973e_date_format(fmt, date) {
+function bxf4e19e73u_date_format(fmt, date) {
     let ret;
     const opt = {
         "Y+": date.getFullYear().toString(),        // 年

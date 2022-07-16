@@ -1,22 +1,30 @@
-.flex {
-    display: flex !important;
+.bxf4e19e73u-blk * {
+    font-size: 12px;
+    color: #3e3e3e;
+    box-sizing: border-box !important;
 }
-.flex-dc {
+.bok-flex {
+    display: flex;
+}
+.bok-f-dc {
     display: flex;
     flex-direction: column;
 }
-.xy-center {
-    align-items: center !important;
-    justify-content: center !important;
+.bok-fw {
+    flex-wrap: wrap;
+}
+.f-xyc {
+    align-items: center;
+    justify-content: center;
 }
 .x-flex-end {
-    justify-content: flex-end !important;
+    justify-content: flex-end;
 }
 .y-flex-end {
-    align-items: flex-end !important;
+    align-items: flex-end;
 }
 .x-sb {
-    justify-content: space-between !important;
+    justify-content: space-between;
 }
 .ibk {
     display: inline-block !important;
@@ -24,48 +32,52 @@
 .dye {
     display: none !important;
 }
-.bxf4e19973e-gc-10 {
+.bok-grid {
     display: grid;
-    grid-template-columns: repeat(10,1fr);
+}
+.g-6 {
+    grid-template-columns: repeat(6, 1fr);
+}
+.gap-5 {
+    gap: 5px;
 }
 .hide-text {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-.switch .butn {
-    margin: 0;
-}
-.bpx {
-    width: 390px;
+/* bok top right block */
+.bok-rt-blk {
+    width: 396px;
     letter-spacing: 1px;
     position: fixed;
     top: 12px;
     right: 12px;
     z-index: 999999;
-    border: 1px solid #efeeee;
+    border: 1px solid #979797;
     border-radius: 4px;
     background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
 }
-.bpx, .bpx * {
-    font-family: arial;
-    font-size: 13px;
-    box-sizing: unset !important;
+.bok-rt-blk .bok-iut, .bgc-group {
+    width: 307px;
 }
-.bpx-sview {
-    min-width: 600px;
-    max-width: 1000px;
-    height: 320px;
+.bok-iut {
+    line-height: 22px;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    outline: none;
 }
-#bpx:hover {
-    box-shadow: 0px 1px 1px 6px #ebfbff;
+.bok-iut.dbox {
+    width: 250px;
 }
-.b-fgp {
+.btb-item {
     margin: 12px;
     display: flex;
     align-items: center;
 }
-.b-fgp .input {
+.btb-item .input {
     width: 240px;
     height: 26px;
     border: 1px solid #ccc;
@@ -74,7 +86,7 @@
     padding: 0 5px;
     background: #fff;
 }
-.b-fgp .input:focus {
+.btb-item .input:focus {
     border-color: #66afe9;
 }
 .cloud-bpx {
@@ -91,13 +103,13 @@
     font-size: 12px;
     cursor: pointer;
 }
-.bpx-cview .dbox {
+.bok-link-c .dbox {
     width: 180px;
 }
-.bpx-cview, .bpx-kview {
+.bok-link-c, .bpx-kview {
     border: 1px solid #000;
 }
-.bxf4e19973e-mask {
+.bxf4e19e73u-mask {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -106,58 +118,58 @@
     z-index: 101;
     opacity: 0.5;
 }
-.bxf4e19973e-mask-t {
+.bxf4e19e73u-mask-t {
    font-size: 200px !important;
    user-select: none;
 }
-.bchoose {
+.bok-box-ch {
     margin-left: 4px;
 }
-.list-view {
-    width: 370px;
-    max-height: 600px;
+.bok-boxs {
+    width: auto;
+    max-height: 300px;
     top: 236px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
     padding: 10px;
     overflow: hidden;
     overflow-y: scroll;
 }
-.list-view .bitem {
-    margin: 5px;
-}
-.list-view ibk {
+.bok-boxs ibk {
     display: inline-block;
-    width: 60px;
+    width: 90px;
     border: 1px solid #ccc;
     border-radius: 2px;
     padding: 3px 7px;
     cursor: pointer;
     text-align: center;
 }
-.list-view ibk:hover {
+.bok-boxs ibk:hover {
     border: 1px solid #1f8cfd;
 }
-.butn {
+.bok-btn {
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 2px;
+    height: 29px;
     padding: 2.5px 12px;
+    line-height: 22px;
     cursor: pointer;
     user-select: none;
     font-weight: unset !important;
 }
-.butn:hover {
+.bok-btn:hover {
     border: 1px solid #949797;
     box-shadow: 2px 2px #ccc;
 }
-.butn-act {
+.bok-btn-act {
     background: #00adff;
     border-color: #00adff;
     color: #fff;
 }
-.msg_area, .bgc-group {
-    width: 252px;
+.msg-area {
+    width: 100%;
 }
 .alone-msg {
     height: 50px;
@@ -166,19 +178,19 @@
     width: 100%;
     font-size: 16px;
 }
-.bgc {
-    width: 10px;
-    height: 17px;
+.bok-bgc {
+    width: 12px;
+    height: 19px;
     border: 1px solid #000;
     border-radius: 2px;
     cursor: pointer;
 }
-.bgc:hover {
+.bok-bgc:hover {
     border: 1px dashed;
 }
 .bgc-b {
-    width: 10px;
-    height: 4px;
+    width: 12px;
+    height: 6px;
     border: 1px solid #fff;
     margin-bottom: 2px;
 }
@@ -200,7 +212,7 @@
         background-color: #0ff;
     }
 }
-.tips {
+.bok-tips {
     width: 176px;
     text-align: center;
     margin-right: 12px;
@@ -218,73 +230,42 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
     z-index: 999998;
 }
-.aBox, .aBox * {
-    font-family: arial;
-    font-size: 13px;
-    box-sizing: unset !important;
-}
 .in-aBox {
-    width: 970px;
-    height: 330px;
-    padding: 15px;
+    height: 360px;
     overflow: hidden;
     position: relative;
     text-align: left;
 }
-.box-go-back, .box-exit {
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    cursor: pointer;
-    z-index: 100;
+.aBox-list {
+    height: 100%;
+    padding: 12px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
-.box-go-back {
+.e-ope {
     display: none;
-    top: 5px;
-    right: 24px;
-    background: #5260ff;
-}
-.box-go-back:hover {
-    background: #bcfad8;
-}
-.box-exit {
-    top: 5px;
-    right: 5px;
-    background: #8f71ff;
-}
-.box-exit:hover {
-    background: #ffc822;
-}
-.emoji-edit, .emoji-del {
+    font-size: 16px;
     position: absolute;
     cursor: pointer;
     z-index: 100;
 }
 .emoji-edit {
-    right: 25px;
+    right: 27px;
 }
-.emoji-del {
+.emoji-del, .emoji-recover {
     right: 5px;
 }
-.emoji-edit, .emoji-del, .emoji-recover {
-    display: none;
-}
-.emoji-recover {
-    cursor: pointer;
-}
-.in-aBox .butn {
+.in-aBox .bok-btn {
     position: relative;
-    margin-right: 6px;
-    margin-bottom: 6px;
-    min-width: 52px;
+    min-width: 90px;
     text-align: center;
 }
-.btn-group .butn {
+.btn-group .bok-btn {
     margin: 0 10px;
     min-width: 52px;
     text-align: center;
 }
-.in-aBox .butn:hover>.m-point {
+.in-aBox .bok-btn:hover>.m-point {
     display: unset;
 }
 .m-point {
@@ -329,7 +310,7 @@
     background: #fff;
     box-shadow: 5px -5px 0px 0px #2c79ca29;
 }
-.bg-msg-inner .title {
+.bg-msg-inner .popup-t {
     width: 100%;
     text-align: center;
     border-bottom: 1px dotted #000;
@@ -354,11 +335,11 @@
     overflow-y: scroll;
 }
 .in-aBox-left {
-    padding-right: 16px;
+    padding-right: 12px;
     border-right: 1px solid #959595;
 }
 .in-aBox-right {
-    width: 823px;
+    width: 833px;
     padding: 0 12px;
     padding-right: 0;
 }
@@ -374,9 +355,12 @@
     font-size: 50px;
     letter-spacing: 20px;
 }
-.line-item {
-    display: flex;
-    justify-content: space-between;
+.box-list {
+    height: 100%;
+    padding: 12px;
+}
+.box-item {
+    height: 25px;
     padding: 2px 7px;
     border: 1px solid #ccc;
     border-radius: 2px;
@@ -384,27 +368,32 @@
     cursor: pointer;
     user-select: none;
 }
-.in-aBox-left .line-item {
+.box-item:last-child {
+    margin-bottom: 0;
+}
+.in-aBox-left .box-item {
     width: 130px;
 }
 .in-aBox-left bem {
     display: inline-block;
     width: 90px;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .in-aBox-left nbr {
     display: none;
     color: #fff;
     text-shadow: 2px 2px #028844;
 }
-.in-aBox-left .line-item:hover>nbr {
+.in-aBox-left .box-item:hover>nbr {
     display: unset;
 }
-.in-aBox-left .line-item-act {
+.in-aBox-left .box-item-act {
     box-shadow: 2px 2px 7px #ccc;
     border-color: #6892ff;
 }
-.in-aBox-left .line-item:hover {
+.in-aBox-left .box-item:hover {
     box-shadow: 2px 2px 7px #ccc;
     border-color: #6892ff;
 }
@@ -435,6 +424,13 @@
 .in-aBox-right .link-item:hover>point {
     display: unset;
 }
+.link-item:last-child {
+    margin-bottom: 0;
+}
+.link-item img {
+    width: 16px;
+    margin-right: 10px;
+}
 .img-space {
     width: 20px;
     height: 20px;
@@ -451,10 +447,6 @@
 }
 .rbin:hover>bem>.emoji-empty {
     display: unset;
-}
-.link-item img {
-    width: 16px;
-    margin-right: 10px;
 }
 .ib-scroll::-webkit-scrollbar {
     display: none;
