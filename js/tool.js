@@ -41,12 +41,21 @@ function bxf4e19e73u_sort_bkey(box) {
     let karr = {};
     if (!box) return karr;
     let bks = Object.keys(box);
+    let obj = {};
     for (let b of bks) {
-        let str = '';
-        for (let i = 0; i < b.length; i++) {
-            str += String(b[i].charCodeAt());
+        let l = b.length;
+        if (!obj[l]) {
+            obj[l] = [];
         }
-        karr[str] = b;
+        obj[l].push(b);
+    }
+    let i = 0;
+    for (let k in obj) {
+        let b = obj[k].sort();
+        for (let j of b) {
+            karr[i] = j;
+            i++;
+        }
     }
     return Object.values(karr);
 }
