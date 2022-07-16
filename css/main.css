@@ -152,6 +152,7 @@
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 2px;
+    height: 29px;
     padding: 2.5px 12px;
     line-height: 22px;
     cursor: pointer;
@@ -241,22 +242,18 @@
     overflow: hidden;
     overflow-y: scroll;
 }
-.emoji-edit, .emoji-del {
+.e-ope {
+    display: none;
+    font-size: 16px;
     position: absolute;
     cursor: pointer;
     z-index: 100;
 }
 .emoji-edit {
-    right: 25px;
+    right: 27px;
 }
-.emoji-del {
+.emoji-del, .emoji-recover {
     right: 5px;
-}
-.emoji-edit, .emoji-del, .emoji-recover {
-    display: none;
-}
-.emoji-recover {
-    cursor: pointer;
 }
 .in-aBox .bok-btn {
     position: relative;

@@ -494,15 +494,7 @@ function show_box(kid) {
     });
 
     $('.emoji-empty').on('click', function () {
-        let el_bg_msg = `<div class="bok-flex f-xyc bg-msg"><div class="bok-f-dc f-xyc bg-msg-inner"><div class="popup-t">清空回收站？ 🚀</div>
-        <div class="btn-group"><ibk class="bok-btn ey-confirm">确认</ibk><ibk class="bok-btn ey-cancel">取消</ibk></div></div></div>`;
-        $('.bxf4e19e73u-blk.aBox').append(el_bg_msg);
-        $('.ey-confirm').on('click', function () {
-            empty_trash();
-        });
-        $('.ey-cancel').on('click', function () {
-            $('.bg-msg').remove();
-        });
+        init_trash_mask();
     });
 
     $('.aBox').on('click', '.emoji-edit', function () {
@@ -535,6 +527,18 @@ function show_box(kid) {
     });
 }
 
+function init_trash_mask() {
+    let el_bg_msg = `<div class="bok-flex f-xyc bg-msg"><div class="bok-f-dc f-xyc bg-msg-inner"><div class="popup-t">清空回收站？ 🚀</div>
+    <div class="btn-group"><ibk class="bok-btn ey-confirm">确认</ibk><ibk class="bok-btn ey-cancel">取消</ibk></div></div></div>`;
+    $('.bxf4e19e73u-blk.aBox').append(el_bg_msg);
+    $('.ey-confirm').on('click', function () {
+        empty_trash();
+    });
+    $('.ey-cancel').on('click', function () {
+        $('.bg-msg').remove();
+    });
+}
+
 function empty_trash() {
     let box = sor.get('dbox');
     for (let i in box) {
@@ -556,6 +560,8 @@ function empty_trash() {
     $('.rbin nbr').text(0);
     $('.in-aBox-right').empty();
     $('.in-aBox-right').append('<div class="empty-box">尚无内容</div>');
+    $('.box-item[kid="b"]').removeClass('rbin');
+    $('.box-item[kid="b"] bem point').remove();
 }
 
 function del_link(kid, lid) {
@@ -570,6 +576,15 @@ function del_link(kid, lid) {
     sor.set('links', links);
     sor.set('dbox', box);
     $(`.link-item[lid=${lid}]`).remove();
+    $('.box-item-act nbr').text(box[kid].qty);
+    $('.box-item[kid="b"] nbr').text(box['b'].qty);
+    if (!$('.box-item[kid="b"] bem point').length) {
+        $('.box-item[kid="b"]').addClass('rbin');
+        $('.box-item[kid="b"] bem').prepend('<point class="emoji-empty" title="清空回收站">🔥</point>');
+        $('.emoji-empty').on('click', function () {
+            init_trash_mask();
+        });
+    }
 }
 
 function recover_link(lid) {
@@ -590,15 +605,21 @@ function recover_link(lid) {
     sor.set('links', links);
     sor.set('dbox', box);
     $(`.link-item[lid=${lid}]`).remove();
+    $(`.box-item[kid="${kid}"] nbr`).text(box[kid].qty);
+    $('.box-item[kid="b"] nbr').text(box['b'].qty);
+    if (box['b'].qty == 0) {
+        $('.box-item[kid="b"]').removeClass('rbin');
+        $('.box-item[kid="b"] bem point').remove();
+    }
     console.log(`已经恢复到 - ${box[kid].name}`);
 }
 
 function inside_right(kid) {
     let links = sor.get('links');
     let insi  = '<div class="empty-box">尚无内容</div>';
-    let edibk = '<point class="emoji-edit">🥦</point><point class="emoji-del">🍁</point>';
+    let edibk = '<point class="e-ope emoji-edit" title="编辑">🥦</point><point class="e-ope emoji-del" title="删除">🍁</point>';
     if (kid == 'b') {
-        edibk = '<point class="emoji-recover" title="恢复">🌿</point>';
+        edibk = '<point class="e-ope emoji-recover" title="恢复">🌿</point>';
     }
     if (Object.keys(links).length > 0) {
         insi = '';
