@@ -75,6 +75,7 @@ $(document).on('keyup', function(e) {
 
 let _back = 0;
 $(document).on('keydown', function (e) {
+    if ($(document.activeElement).attr('type') == "text") return;
     // left 37 | a 65
     if (e.keyCode == 37 || e.keyCode == 65) {
         setTimeout(() => {
@@ -100,7 +101,7 @@ $(document).on('keydown', function (e) {
 $(document).on("keydown", function(e) {
     let key = e.which || e.keyCode;
     if (key == 27) {
-        if ($('.bxf4e19e73u-blk').length == 1) {
+        if ($('.bxf4e19e73u-blk').length == 1 && !$('.bxf4e19e73u-mask').length) {
             $('.bxf4e19e73u-blk').remove();
             return;
         }
