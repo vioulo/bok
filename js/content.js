@@ -331,10 +331,12 @@ function create_link(obj) {
     if (obj['action'][0] == 'new-link') {
         get_site_icon();
     }
-    $('.bok-btn.new-link').on('click', function() {
+    $('.bok-btn.new-link').on('click', function () {
+        remove_box_ch();
         new_link();
     });
-    $('.bok-btn.update-link').on('click', function() {
+    $('.bok-btn.update-link').on('click', function () {
+        remove_box_ch();
         update_link();
     });
     $('.bok-box-ch').on('click', function() {
@@ -349,6 +351,11 @@ function create_link(obj) {
             $(this).text("选择");
         }
     });
+}
+
+function remove_box_ch() {
+    $('.bok-box-ch').attr('is_show', 0).text('选择');
+    $('.bxf4e19e73u-blk.bok-boxs').remove();
 }
 
 function new_link() {
