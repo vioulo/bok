@@ -66,9 +66,9 @@ $('.download').on('click', function () {
                 show_tips('.download', '没有数据可供下载');
                 return;
             }
-            // 修改 link box 以在导入时匹配
-            for (let i in link) {
-                for (let b in box) {
+            for (let b in box) {
+                box[b].qty = 0; // 清零数量
+                for (let i in link) {
                     if (link[i].box == b) {
                         link[i].box = box[b].name;
                     }
@@ -83,7 +83,7 @@ $('.download').on('click', function () {
             const data = { box: barr, link };
             const str = JSON.stringify(data);
             let seconds = parseInt(new Date().getTime() / 1000);
-            let dname = `bok-B${barr.length}-L${link.length}-${seconds}.json`;
+            let dname = `bok${seconds}-B${barr.length}-L${link.length}.json`;
             let elt_hid = document.createElement('a');
             elt_hid.href = window.URL.createObjectURL(new Blob([str], { type: 'application/json' }));
             elt_hid.target = '_blank';
