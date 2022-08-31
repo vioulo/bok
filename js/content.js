@@ -791,6 +791,8 @@ function _update_dbox(kid, dbox, reMsg) {
         } else {
             list[kid] = new_item;
         }
+    } else {
+        list[kid] = new_item;
     }
     sor.set('dbox', list);
     if (reMsg) {
