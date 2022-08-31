@@ -766,14 +766,45 @@ function _update_dbox(kid, dbox, reMsg) {
     }
     new_item.updated_at = (new Date()).valueOf();
     delete list[kid];
-    list[kid] = new_item;
+
+    // 更新了名称
+    let rep_kid = '';
+    if (new_item.name != item.name) {
+        for (let i in list) {
+            // 当前存在同名云涟
+            if (list[i].name == new_item.name) {
+                rep_kid = i;
+            }
+        }
+        if (rep_kid) {
+            let links = sor.links;
+            let link_qty = 0;
+            for (let l of links) {
+                if (l.box == kid) {
+                    link_qty++;
+                    l.box = rep_kid;
+                    l.aox = rep_kid;
+                }
+            }
+            sor.set('links', links);
+            list[rep_kid].qty += link_qty;
+        } else {
+            list[kid] = new_item;
+        }
+    } else {
+        list[kid] = new_item;
+    }
     sor.set('dbox', list);
     if (reMsg) {
-        let el_aim = $(`.bok-btn[kid='${kid}']`);
         // reMsg 仅当从列表编辑的时候为 true
+        let el_aim = $(`.bok-btn[kid='${kid}']`);
         if (new_item.name != item.name) {
-            // 如果名称被更新了，则更新打开的列表中的名称
-            el_aim.text(new_item.name);
+            if (!rep_kid) {
+                // 如果名称被更新了，则更新打开的列表中的名称
+                el_aim.text(new_item.name);
+            } else {
+                el_aim.remove();
+            }
         }
         // update background color
         if (new_item.bgc != item.bgc) {
