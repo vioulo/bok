@@ -73,25 +73,36 @@ $(document).on('keyup', function(e) {
     }
 });
 
-let _back = 0;
+let _ktag = 0;
 $(document).on('keydown', function (e) {
     if ($(document.activeElement).attr('type') == "text") return;
+    setTimeout(() => {_ktag = 0}, 1000);
+    if (_ktag < 1) {
+        _ktag++;
+        return;
+    }
+    if (_ktag > 1) {
+        _ktag = 0;
+        return;
+    }
+    _ktag += e.keyCode;
     // left 37 | a 65
-    if (e.keyCode == 37 || e.keyCode == 65) {
-        setTimeout(() => {
-            _back = 0;
-        }, 1000);
-        if (_back < 1) {
-            _back++;
-            return;
-        }
-        if (_back > 1) {
-            _back = 0;
-        }
-        if (_back == 1) {
-            if ($('.box-list').length) {
-                $('.box-list').remove();
-                $('.aBox-btn').removeClass('dye');
+    if ((_ktag == 38 || _ktag == 66) && $('.box-list').length) {
+        $('.box-list').remove();
+        $('.aBox-btn').removeClass('dye');
+    }
+    // s 83
+    if (_ktag == 84) {
+        if ($('#e73u_aBox_list').length) {
+            let box_sort_status = window.bxf4e19e73u_box_sort.options.disabled;
+            window.bxf4e19e73u_box_sort.options.disabled = !box_sort_status;
+            if (!$('.e73u_sort_bar').length) {
+                $('.bxf4e19e73u-blk.aBox').prepend('<div class="e73u_sort_bar bok-flex x-sb dye"><div class="sort-tip">开始拖拽排序</div><div class="sort-confirm">确定</div>');
+            }
+            if (box_sort_status) {
+                $('.e73u_sort_bar').removeClass('dye');
+            } else {
+                $('.e73u_sort_bar').addClass('dye');
             }
         }
     }
@@ -172,8 +183,15 @@ function keydown_r() {
         }
     }
 
-    let box = `<div class="bxf4e19e73u-blk aBox"><div class="in-aBox aBox-btn"><div class="aBox-list bok-grid g-6 gap-5 ib-scroll">${insi}</div></div></div>`;
+    let box = `<div class="bxf4e19e73u-blk aBox"><div class="in-aBox aBox-btn"><div class="aBox-list bok-grid g-6 gap-5 ib-scroll" id="e73u_aBox_list">${insi}</div></div></div>`;
     $('body').append(box);
+    window.bxf4e19e73u_box_sort = new Sortable(document.getElementById('e73u_aBox_list'), {
+        animation: 150,
+        disabled: true,
+        // ghostClass: "ghostClass",
+        // dragClass: "dragClass",
+        removeCloneOnHide: true,
+    });
     $('.in-aBox .bok-btn').on('click', function() {
         if ($(this).attr('canin') == 'yes') {
             show_box($(this).attr('kid'));

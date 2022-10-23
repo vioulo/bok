@@ -463,3 +463,19 @@
     box-shadow: inset 0 0 6px rgba(0,0,0,.3);
     background: #adfdff;
 }
+.e73u_sort_bar {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    width: 170px;
+}
+.e73u_sort_bar div {
+    color: #fff;
+    background: #5173a9;
+    padding: 0 1rem;
+    border-radius: 2px;
+}
+.e73u_sort_bar .sort-confirm {
+    background: #004abf;
+    cursor: pointer;
+}
