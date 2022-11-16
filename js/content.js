@@ -90,24 +90,44 @@ $(document).on('keydown', function (e) {
     if ((_ktag == 38 || _ktag == 66) && $('.box-list').length) {
         $('.box-list').remove();
         $('.aBox-btn').removeClass('dye');
+        $('.e73u_sort_bar').remove();
     }
     // s 83
     if (_ktag == 84) {
-        if ($('#e73u_aBox_list').length) {
+        if (!$('.in-aBox').length) return;
+        // move box switch
+        if ($('.in-aBox.aBox-btn').length && !$('.in-aBox.aBox-btn').hasClass('dye')) {
             let box_sort_status = window.bxf4e19e73u_box_sort.options.disabled;
             window.bxf4e19e73u_box_sort.options.disabled = !box_sort_status;
-            if (!$('.e73u_sort_bar').length) {
-                $('.bxf4e19e73u-blk.aBox').prepend('<div class="e73u_sort_bar bok-flex x-sb dye"><div class="sort-tip">开始拖拽排序</div><div class="sort-confirm">确定</div>');
-            }
-            if (box_sort_status) {
-                $('.e73u_sort_bar').removeClass('dye');
-            } else {
-                $('.e73u_sort_bar').addClass('dye');
-            }
+            show_sort_bar(box_sort_status, 'box');
+        }
+        // move link switch
+        if ($('.in-aBox.box-list').length && $('.in-aBox-right .link-item').length) {
+            let link_sort_status = window.bxf4e19e73u_link_sort.options.disabled;
+            window.bxf4e19e73u_link_sort.options.disabled = !link_sort_status;
+            show_sort_bar(link_sort_status, 'link');
         }
     }
     // right 39 | d 68
 });
+
+function show_sort_bar(status, tag) {
+    if (!$('.e73u_sort_bar').length) {
+        $('.bxf4e19e73u-blk.aBox').prepend('<div class="e73u_sort_bar bok-flex x-sb dye"><div class="sort-tip">开始拖拽排序</div><div class="sort-confirm">确定</div>');
+    }
+    if (status) {
+        if (tag == 'box') {
+            $('.bok-btn').attr('canin', 'no');
+        }
+        $('.e73u_sort_bar').removeClass('dye');
+    } else {
+        if (tag == 'box') {
+            $('.bok-btn').attr('canin', 'yes');
+        }
+        $('.e73u_sort_bar').addClass('dye');
+    }
+    $('.e73u_sort_bar').attr('tag', tag);
+}
 
 $(document).on("keydown", function(e) {
     let key = e.which || e.keyCode;
@@ -183,9 +203,9 @@ function keydown_r() {
         }
     }
 
-    let box = `<div class="bxf4e19e73u-blk aBox"><div class="in-aBox aBox-btn"><div class="aBox-list bok-grid g-6 gap-5 ib-scroll" id="e73u_aBox_list">${insi}</div></div></div>`;
+    let box = `<div class="bxf4e19e73u-blk aBox"><div class="in-aBox aBox-btn"><div class="aBox-list bok-grid g-6 gap-5 ib-scroll" id="e73u_Box_list">${insi}</div></div></div>`;
     $('body').append(box);
-    window.bxf4e19e73u_box_sort = new Sortable(document.getElementById('e73u_aBox_list'), {
+    window.bxf4e19e73u_box_sort = new Sortable(document.getElementById('e73u_Box_list'), {
         animation: 150,
         disabled: true,
         // ghostClass: "ghostClass",
@@ -505,9 +525,17 @@ function show_box(kid) {
         left_inside += `<div class="bok-flex f-xyc box-item ${left_item_class} ${rek}" style="background:${boxs[b].bgc};" kid="${b}" title="${boxs[b].name}"><bem>${sign}<blk>${boxs[b].name}</blk></bem><nbr>${boxs[b].qty}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
-    let cont = `<div class="in-aBox box-list bok-flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}">${right_inside}</div></div>`;
+    let cont = `<div class="in-aBox box-list bok-flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}" id="e73u_link_list">${right_inside}</div></div>`;
     $('.aBox-btn').addClass('dye');
     $('.aBox').append(cont);
+
+    window.bxf4e19e73u_link_sort = new Sortable(document.getElementById('e73u_link_list'), {
+        animation: 150,
+        disabled: true,
+        // ghostClass: "ghostClass",
+        // dragClass: "dragClass",
+        removeCloneOnHide: true,
+    });
 
     // scroll animate
     let el_top = $('.box-item-act').position().top - 20;
