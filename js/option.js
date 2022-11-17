@@ -124,7 +124,7 @@ function dump_tree_nodes(bookmark) {
                 push_link(c, '缓存区');
                 continue;
             }
-            window.bok_boxs.push({ id: 0, name: c.title, bgc: '#ffffff', qty: 0, created_at: c.dateAdded, updated_at: c.dateAdded });
+            window.bok_boxs.push({ id: 0, name: c.title, bgc: '#ffffff', qty: 0, sort: 0, created_at: c.dateAdded, updated_at: c.dateAdded });
             dump_nodes(c.children, c.title); // links
         }
     }
@@ -142,7 +142,7 @@ function dump_nodes(children, box) {
 }
 
 function push_link(link, box) {
-    let _link = { id: 0, aox: '', box: box, title: link.title, link: link.url, icon: '', created_at: link.dateAdded, updated_at: link.dateAdded };
+    let _link = { id: 0, aox: '', box: box, title: link.title, link: link.url, icon: '', sort: 0, created_at: link.dateAdded, updated_at: link.dateAdded };
     window.bok_links.push(_link);
 }
 
@@ -156,8 +156,8 @@ function import_bok(_item, link, box) {
         } else {
             let current = (new Date()).valueOf();
             obj = {
-                'a': { id: 0, name: '缓存区', bgc: '#ffffff', qty: 0, created_at: current, updated_at: current },
-                'b': { id: 0, name: '回收站', bgc: '#ffffff', qty: 0, created_at: current, updated_at: current },
+                'a': { id: 0, name: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current },
+                'b': { id: 0, name: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current },
             };
         }
         for (let o in obj) {

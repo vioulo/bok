@@ -8,8 +8,8 @@ let sor = {
     creation: function () {
         let time = (new Date()).valueOf();
         let obj = {
-            'a' : { id: 0, name: '缓存区', bgc: '#ffffff', qty: 0, created_at: time, updated_at: time },
-            'b' : { id: 0, name: '回收站', bgc: '#ffffff', qty: 0, created_at: time, updated_at: time },
+            'a' : { id: 0, name: '缓存区', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
+            'b' : { id: 0, name: '回收站', bgc: '#ffffff', qty: 0, sort: 0, created_at: time, updated_at: time },
         };
         sor.set('dbox', obj);
     },
@@ -419,9 +419,9 @@ function new_link() {
         }
     }
     let current = (new Date()).valueOf();
-    let obj = { id: 0, name: dbox, bgc: '#ffffff', qty: 1, created_at: current, updated_at: current };
+    let obj = { id: 0, name: dbox, bgc: '#ffffff', qty: 1, sort: 0, created_at: current, updated_at: current };
     let kid = _new_dbox(obj, false)['id'];
-    links[links_len] = { id: 0, aox:kid, box:kid, title:dtle, link:dlnk, icon:icon, created_at:current, updated_at:current };
+    links[links_len] = { id: 0, aox:kid, box:kid, title:dtle, link:dlnk, icon:icon, sort: 0, created_at:current, updated_at:current };
     sor.set('links', links);
     show_tips('添加成功', true);
 }
@@ -476,7 +476,7 @@ function update_link() {
             }
         }
         if (box_id == '') {
-            let nbox_obj = { id: 0, name: dbox, bgc: '#ffffff', qty: 0, created_at: current, updated_at: current };
+            let nbox_obj = { id: 0, name: dbox, bgc: '#ffffff', qty: 0, sort: 0, created_at: current, updated_at: current };
             let ret_db = _new_dbox(nbox_obj, false);
             ret_box = ret_db['data'];
             box_id = ret_db['id'];
@@ -728,7 +728,7 @@ function check_dbox() {
         return show_tips('云奁名称 16 个字符内', false);
     }
     let current = (new Date()).valueOf();
-    return { id: 0, name: bname, bgc: bgc, qty: 0, created_at: current, updated_at: current };
+    return { id: 0, name: bname, bgc: bgc, qty: 0, sort: 0, created_at: current, updated_at: current };
 }
 
 function new_dbox() {
