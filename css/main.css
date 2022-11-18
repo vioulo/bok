@@ -360,8 +360,7 @@
     padding: 12px;
 }
 .box-item {
-    height: 25px;
-    padding: 2px 7px;
+    height: 28px;
     border: 1px solid #ccc;
     border-radius: 2px;
     margin-bottom: 6px;
@@ -462,4 +461,20 @@
     border-radius: 2px;
     box-shadow: inset 0 0 6px rgba(0,0,0,.3);
     background: #adfdff;
+}
+.e73u_sort_bar {
+    position: absolute;
+    top: -36px;
+    right: 0;
+    width: 150px;
+}
+.e73u_sort_bar div {
+    color: #fff;
+    background: #314078;
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+}
+.e73u_sort_bar .sort-confirm {
+    background: #6654ef;
+    cursor: pointer;
 }
