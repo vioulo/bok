@@ -96,13 +96,12 @@ function bxf4e19e73u_sort_box(obj) {
     let index = 0;
     for (let i in obj) {
         obj[i].key = i;
-        if (obj[i].sort) {
-            index = obj[i].sort;
+        let k = obj[i].sort;
+        if (sorted[k]) {
+            k = index;
         }
-        if (sorted[index]) {
-            index += 1;
-        }
-        sorted[index] = obj[i];
+        sorted[k] = obj[i];
+        index++;
     }
     return sorted;
 }

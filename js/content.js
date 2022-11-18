@@ -735,13 +735,12 @@ function inside_right(kid) {
     for (let i in links) {
         if (links[i].box == kid) {
             links[i].key = i;
-            if (links[i].sort > 0) {
-                index = links[i].sort;
+            let k = links[i].sort;
+            if (sorted_link[k]) {
+                k = index;
             }
-            if (sorted_link[index]) {
-                index += 1;
-            }
-            sorted_link[index] = links[i];
+            sorted_link[k] = links[i];
+            index++;
         }
     }
     for (let l in sorted_link) {
