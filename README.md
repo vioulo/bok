@@ -34,6 +34,9 @@ A browser extension for collecting web links
 点击扩展图标进入选项设置页面，可以同步当前浏览器书签到扩展、从文件导入链接、导出当前扩展数据到文件，以及清空所有数据  
 <image src="./manual/screenshots/setting.png">  
 
+2022-11-18 完成文件夹、链接的拖拽排序  
+在弹窗出现的情况下，双击 `ss` 以拖拽排序，点击确定保存数据  
+
 计划中的功能：  
 ✖️ 添加 `hhh` 帮助内容 -x- 去掉这个功能  
 ✅ 调整储存的数据结构  
