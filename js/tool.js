@@ -80,3 +80,29 @@ function bxf4e19e73u_date_format(fmt, date) {
     // let date = new Date()
     // dateFormat("YYYY-mm-dd HH:MM", date)
 }
+
+function bxf4e19e73u_array_swop(arr) {
+    if (!arr) return {};
+    let obj = {};
+    for (let i in arr) {
+        obj[arr[i]] = i;
+    }
+    return obj;
+}
+
+function bxf4e19e73u_sort_box(obj) {
+    if (!Object.keys(obj).length) return {};
+    let sorted = {};
+    let index = 0;
+    for (let i in obj) {
+        obj[i].key = i;
+        if (obj[i].sort) {
+            index = obj[i].sort;
+        }
+        if (sorted[index]) {
+            index += 1;
+        }
+        sorted[index] = obj[i];
+    }
+    return sorted;
+}

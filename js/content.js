@@ -113,20 +113,64 @@ $(document).on('keydown', function (e) {
 
 function show_sort_bar(status, tag) {
     if (!$('.e73u_sort_bar').length) {
-        $('.bxf4e19e73u-blk.aBox').prepend('<div class="e73u_sort_bar bok-flex x-sb dye"><div class="sort-tip">开始拖拽排序</div><div class="sort-confirm">确定</div>');
+        $('.bxf4e19e73u-blk.aBox').prepend('<div class="e73u_sort_bar bok-flex x-sb dye"><div class="sort-tip">开始拖拽排序</div><div class="sort-confirm" id="bxf4e19e73u_sort_confirm">确定</div>');
     }
     if (status) {
         if (tag == 'box') {
             $('.bok-btn').attr('canin', 'no');
+            $('.bok-btn .m-point').addClass('dye');
         }
         $('.e73u_sort_bar').removeClass('dye');
     } else {
         if (tag == 'box') {
             $('.bok-btn').attr('canin', 'yes');
+            $('.bok-btn .m-point').removeClass('dye');
         }
         $('.e73u_sort_bar').addClass('dye');
     }
     $('.e73u_sort_bar').attr('tag', tag);
+    $('#bxf4e19e73u_sort_confirm').on('click', function () {
+        let tag = $('.e73u_sort_bar').attr('tag');
+        if (tag == 'box') {
+            update_box_sort();
+        } else {
+            update_link_sort();
+        }
+    });
+}
+
+function update_box_sort() {
+    if (!$('#e73u_Box_list .bok-btn').length) {
+        return;
+    }
+    let sorted = $('#e73u_Box_list .bok-btn').map(function (k, v) {
+        return $(v).attr('kid');
+    }).get();
+    let sorted_obj = bxf4e19e73u_array_swop(sorted);
+    let box = sor.get('dbox');
+    for (let i in box) {
+        box[i].sort = sorted_obj[i];
+    }
+    sor.set('dbox', box);
+    $('.e73u_sort_bar').remove();
+    window.bxf4e19e73u_box_sort.options.disabled = true;
+}
+
+function update_link_sort() {
+    if (!$('#e73u_link_list .link-item').length) {
+        return;
+    }
+    let sorted = $('#e73u_link_list .link-item').map(function (k, v) {
+        return $(v).attr('lid');
+    }).get();
+    let sorted_obj = bxf4e19e73u_array_swop(sorted);
+    let links = sor.get('links');
+    for (let i in sorted_obj) {
+        links[i].sort = sorted_obj[i];
+    }
+    sor.set('links', links);
+    $('.e73u_sort_bar').remove();
+    window.bxf4e19e73u_link_sort.options.disabled = true;
 }
 
 $(document).on("keydown", function(e) {
@@ -190,16 +234,17 @@ function keydown_r() {
     if ($(".aBox").length == 1) return;
     let dbox = sor.get('dbox');
     let insi = '<div class="empty-box">尚无内容</div>';
-    let bkey = bxf4e19e73u_sort_bkey(dbox);
-    if (bkey.length) {
+    if (Object.keys(dbox).length) {
         insi = '';
         let points = '';
-        for (let b of bkey) {
+        let sorted_box = bxf4e19e73u_sort_box(dbox);
+        for (let i in sorted_box) {
+            let b = sorted_box[i];
             points = '<point class="m-point pt-edit"></point><point class="m-point pt-del"></point>';
-            if (['a', 'b'].includes(b)) {
+            if (['a', 'b'].includes(b.key)) {
                 points = '';
             }
-            insi += `<div class="bok-btn" canin="yes" kid="${b}" style="background:${dbox[b].bgc}">${points}<font>${dbox[b].name}</font></div>`;
+            insi += `<div class="bok-btn" canin="yes" kid="${b.key}" style="background:${b.bgc}">${points}<font>${b.name}</font></div>`;
         }
     }
 
@@ -509,20 +554,21 @@ function show_box(kid) {
     let box_obj = boxs[kid];
     let left_inside = '';
     let left_item_class = '';
-    let bkey = bxf4e19e73u_sort_bkey(boxs);
-    for (let b of bkey) {
+    let sorted_box = bxf4e19e73u_sort_box(boxs);
+    for (let i in sorted_box) {
+        let b = sorted_box[i];
         let rek = '';
         let sign = '';
-        if (boxs[b].name == box_obj.name) {
+        if (b.name == box_obj.name) {
             left_item_class = 'box-item-act';
         } else {
             left_item_class = '';
         }
-        if (b == 'b' && boxs[b].qty > 0) {
+        if (b.key == 'b' && b.qty > 0) {
             rek = 'rbin';
             sign = '<point class="emoji-empty" title="清空回收站">🔥</point>';
         }
-        left_inside += `<div class="bok-flex f-xyc box-item ${left_item_class} ${rek}" style="background:${boxs[b].bgc};" kid="${b}" title="${boxs[b].name}"><bem>${sign}<blk>${boxs[b].name}</blk></bem><nbr>${boxs[b].qty}</nbr></div>`;
+        left_inside += `<div class="bok-flex f-xyc box-item ${left_item_class} ${rek}" style="background:${b.bgc};" kid="${b.key}" title="${b.name}"><bem>${sign}<blk>${b.name}</blk></bem><nbr>${b.qty}</nbr></div>`;
     }
     let right_inside = inside_right(kid);
     let cont = `<div class="in-aBox box-list bok-flex"><div class="in-aBox-left ib-scroll">${left_inside}</div><div class="in-aBox-right ib-scroll" kid="${kid}" id="e73u_link_list">${right_inside}</div></div>`;
@@ -680,32 +726,45 @@ function inside_right(kid) {
     if (kid == 'b') {
         edibk = '<point class="e-ope emoji-recover" title="恢复">🌿</point>';
     }
+    if (!Object.keys(links).length) return c_ety;
     let c_insi = '';
-    if (Object.keys(links).length > 0) {
-        let icon = '';
-        let word = '';
-        for (let i in links) {
-            if (links[i].box == kid) {
-                word = links[i]['title'].substring(0, 1);
-                icon = `<div class="img-space">${word}</div>`;
-                if (links[i].icon != '') {
-                    icon = `<img src="${links[i].icon}">`;
-                }
-                c_insi += `<div class="link-item" lid="${i}">${icon}<a href="${links[i].link}" target='_blank' class="hide-text">${links[i].title}</a>${edibk}</div>`;
+    let icon = '';
+    let word = '';
+    let sorted_link = {};
+    let index = 0;
+    for (let i in links) {
+        if (links[i].box == kid) {
+            links[i].key = i;
+            if (links[i].sort > 0) {
+                index = links[i].sort;
             }
+            if (sorted_link[index]) {
+                index += 1;
+            }
+            sorted_link[index] = links[i];
         }
     }
-    return c_insi || c_ety;
+    for (let l in sorted_link) {
+        let v = sorted_link[l];
+        word = v.title.substring(0, 1);
+        icon = `<div class="img-space">${word}</div>`;
+        if (v.icon != '') {
+            icon = `<img src="${v.icon}">`;
+        }
+        c_insi += `<div class="link-item" lid="${v.key}">${icon}<a href="${v.link}" target='_blank' class="hide-text">${v.title}</a>${edibk}</div>`;
+    }
+    return c_insi;
 }
 
 function list_box() {
     let box = sor.get('dbox');
     let lview = '<div class="bxf4e19e73u-blk bok-rt-blk bok-boxs ib-scroll">';
-    let bkey = bxf4e19e73u_sort_bkey(box);
-    if (bkey.length) {
-        for (let b of bkey) {
-            if (b == 'b') continue;
-            lview += `<div><ibk class="hide-text">${box[b].name}</ibk></div>`;
+    if (Object.keys(box).length) {
+        let sorted_box = bxf4e19e73u_sort_box(box);
+        for (let i in sorted_box) {
+            let b = sorted_box[i];
+            if (b.key == 'b') continue;
+            lview += `<div><ibk class="hide-text">${b.name}</ibk></div>`;
         }
     }
     $('body').append(lview + '</div>');
