@@ -153,6 +153,7 @@ function update_box_sort() {
     }
     sor.set('dbox', box);
     $('.e73u_sort_bar').remove();
+    $('.bok-btn .m-point').removeClass('dye');
     window.bxf4e19e73u_box_sort.options.disabled = true;
 }
 
