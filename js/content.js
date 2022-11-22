@@ -716,6 +716,7 @@ function recover_link(lid) {
         $('.box-item[kid="b"]').removeClass('rbin');
         $('.box-item[kid="b"] bem point').remove();
     }
+    $('.in-aBox-right').append('<div class="empty-box">尚无内容</div>');
     console.log(`已经恢复到 - ${box[kid].name}`);
 }
 
@@ -726,12 +727,13 @@ function inside_right(kid) {
     if (kid == 'b') {
         edibk = '<point class="e-ope emoji-recover" title="恢复">🌿</point>';
     }
-    if (!Object.keys(links).length) return c_ety;
+    let links_len = Object.keys(links).length;
+    if (!links_len) return c_ety;
     let c_insi = '';
     let icon = '';
     let word = '';
     let sorted_link = {};
-    let index = 0;
+    let index = links_len;
     for (let i in links) {
         if (links[i].box == kid) {
             links[i].key = i;
@@ -743,6 +745,7 @@ function inside_right(kid) {
             index++;
         }
     }
+    if (!Object.keys(sorted_link).length) return c_ety;
     for (let l in sorted_link) {
         let v = sorted_link[l];
         word = v.title.substring(0, 1);
