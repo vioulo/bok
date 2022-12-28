@@ -91,18 +91,18 @@ function bxf4e19e73u_array_swop(arr) {
 }
 
 function bxf4e19e73u_sort_box(obj) {
-    if (!Object.keys(obj).length) return {};
+    let len = Object.keys(obj).length;
+    if (!len) return {};
     let sorted = {};
-    let index = 0;
+    let index = len;
     for (let i in obj) {
         obj[i].key = i;
-        if (obj[i].sort) {
-            index = obj[i].sort;
+        let k = obj[i].sort;
+        if (sorted[k]) {
+            k = index;
         }
-        if (sorted[index]) {
-            index += 1;
-        }
-        sorted[index] = obj[i];
+        sorted[k] = obj[i];
+        index++;
     }
     return sorted;
 }

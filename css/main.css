@@ -471,7 +471,7 @@
 .e73u_sort_bar div {
     color: #fff;
     background: #314078;
-    padding: 0.5rem 1rem;
+    padding: 5px 10px;
     border-radius: 2px;
 }
 .e73u_sort_bar .sort-confirm {
